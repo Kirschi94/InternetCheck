@@ -25,27 +25,29 @@ Partial Class Form_Main
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
         Me.ListView_Losses = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = New System.Windows.Forms.ColumnHeader()
+        Me.ColumnHeader2 = New System.Windows.Forms.ColumnHeader()
+        Me.ColumnHeader3 = New System.Windows.Forms.ColumnHeader()
         Me.Label_Losses = New System.Windows.Forms.Label()
         Me.Button_CheckButton = New System.Windows.Forms.Button()
         Me.TabControl_Main = New System.Windows.Forms.TabControl()
         Me.TabPage_Overview = New System.Windows.Forms.TabPage()
+        Me.TabPage_Options = New System.Windows.Forms.TabPage()
+        Me.CheckBox_WinStart = New System.Windows.Forms.CheckBox()
+        Me.TextBox_ConLost = New System.Windows.Forms.TextBox()
+        Me.TextBox_ConBack = New System.Windows.Forms.TextBox()
+        Me.CheckBox_ConBack = New System.Windows.Forms.CheckBox()
+        Me.CheckBox_ConLost = New System.Windows.Forms.CheckBox()
         Me.TabPage_Log = New System.Windows.Forms.TabPage()
         Me.RichTextBox_Log = New System.Windows.Forms.RichTextBox()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.TabPage_Options = New System.Windows.Forms.TabPage()
-        Me.CheckBox_ConLost = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_ConBack = New System.Windows.Forms.CheckBox()
-        Me.TextBox_ConBack = New System.Windows.Forms.TextBox()
-        Me.TextBox_ConLost = New System.Windows.Forms.TextBox()
-        Me.CheckBox_WinStart = New System.Windows.Forms.CheckBox()
-        Me.ColumnHeader1 = New System.Windows.Forms.ColumnHeader()
-        Me.ColumnHeader2 = New System.Windows.Forms.ColumnHeader()
-        Me.ColumnHeader3 = New System.Windows.Forms.ColumnHeader()
+        Me.CheckBox_Notify = New System.Windows.Forms.CheckBox()
+        Me.CheckBox_LogSave = New System.Windows.Forms.CheckBox()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
-        Me.TabPage_Log.SuspendLayout()
         Me.TabPage_Options.SuspendLayout()
+        Me.TabPage_Log.SuspendLayout()
         Me.SuspendLayout()
         '
         'ListView_Losses
@@ -61,6 +63,21 @@ Partial Class Form_Main
         Me.ListView_Losses.TabIndex = 0
         Me.ListView_Losses.UseCompatibleStateImageBehavior = False
         Me.ListView_Losses.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "Connection lost"
+        Me.ColumnHeader1.Width = 200
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "Connection reestablished"
+        Me.ColumnHeader2.Width = 200
+        '
+        'ColumnHeader3
+        '
+        Me.ColumnHeader3.Text = "Duration"
+        Me.ColumnHeader3.Width = 150
         '
         'Label_Losses
         '
@@ -108,6 +125,76 @@ Partial Class Form_Main
         Me.TabPage_Overview.Text = "Overview"
         Me.TabPage_Overview.UseVisualStyleBackColor = True
         '
+        'TabPage_Options
+        '
+        Me.TabPage_Options.Controls.Add(Me.CheckBox_LogSave)
+        Me.TabPage_Options.Controls.Add(Me.CheckBox_Notify)
+        Me.TabPage_Options.Controls.Add(Me.CheckBox_WinStart)
+        Me.TabPage_Options.Controls.Add(Me.TextBox_ConLost)
+        Me.TabPage_Options.Controls.Add(Me.TextBox_ConBack)
+        Me.TabPage_Options.Controls.Add(Me.CheckBox_ConBack)
+        Me.TabPage_Options.Controls.Add(Me.CheckBox_ConLost)
+        Me.TabPage_Options.Location = New System.Drawing.Point(4, 24)
+        Me.TabPage_Options.Name = "TabPage_Options"
+        Me.TabPage_Options.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage_Options.Size = New System.Drawing.Size(593, 428)
+        Me.TabPage_Options.TabIndex = 2
+        Me.TabPage_Options.Text = "Options"
+        Me.TabPage_Options.UseVisualStyleBackColor = True
+        '
+        'CheckBox_WinStart
+        '
+        Me.CheckBox_WinStart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox_WinStart.AutoSize = True
+        Me.CheckBox_WinStart.Location = New System.Drawing.Point(8, 403)
+        Me.CheckBox_WinStart.Name = "CheckBox_WinStart"
+        Me.CheckBox_WinStart.Size = New System.Drawing.Size(159, 19)
+        Me.CheckBox_WinStart.TabIndex = 4
+        Me.CheckBox_WinStart.Text = "Start on Windows startup"
+        Me.CheckBox_WinStart.UseVisualStyleBackColor = True
+        '
+        'TextBox_ConLost
+        '
+        Me.TextBox_ConLost.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox_ConLost.Location = New System.Drawing.Point(243, 14)
+        Me.TextBox_ConLost.Name = "TextBox_ConLost"
+        Me.TextBox_ConLost.Size = New System.Drawing.Size(344, 23)
+        Me.TextBox_ConLost.TabIndex = 3
+        '
+        'TextBox_ConBack
+        '
+        Me.TextBox_ConBack.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox_ConBack.Location = New System.Drawing.Point(243, 43)
+        Me.TextBox_ConBack.Name = "TextBox_ConBack"
+        Me.TextBox_ConBack.Size = New System.Drawing.Size(344, 23)
+        Me.TextBox_ConBack.TabIndex = 2
+        '
+        'CheckBox_ConBack
+        '
+        Me.CheckBox_ConBack.AutoSize = True
+        Me.CheckBox_ConBack.Checked = True
+        Me.CheckBox_ConBack.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_ConBack.Location = New System.Drawing.Point(8, 45)
+        Me.CheckBox_ConBack.Name = "CheckBox_ConBack"
+        Me.CheckBox_ConBack.Size = New System.Drawing.Size(200, 19)
+        Me.CheckBox_ConBack.TabIndex = 1
+        Me.CheckBox_ConBack.Text = "Connection reestablished Sound:"
+        Me.CheckBox_ConBack.UseVisualStyleBackColor = True
+        '
+        'CheckBox_ConLost
+        '
+        Me.CheckBox_ConLost.AutoSize = True
+        Me.CheckBox_ConLost.Checked = True
+        Me.CheckBox_ConLost.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_ConLost.Location = New System.Drawing.Point(8, 16)
+        Me.CheckBox_ConLost.Name = "CheckBox_ConLost"
+        Me.CheckBox_ConLost.Size = New System.Drawing.Size(150, 19)
+        Me.CheckBox_ConLost.TabIndex = 0
+        Me.CheckBox_ConLost.Text = "Connection lost Sound:"
+        Me.CheckBox_ConLost.UseVisualStyleBackColor = True
+        '
         'TabPage_Log
         '
         Me.TabPage_Log.Controls.Add(Me.RichTextBox_Log)
@@ -141,88 +228,29 @@ Partial Class Form_Main
         '
         Me.Timer1.Interval = 60000
         '
-        'TabPage_Options
+        'CheckBox_Notify
         '
-        Me.TabPage_Options.Controls.Add(Me.CheckBox_WinStart)
-        Me.TabPage_Options.Controls.Add(Me.TextBox_ConLost)
-        Me.TabPage_Options.Controls.Add(Me.TextBox_ConBack)
-        Me.TabPage_Options.Controls.Add(Me.CheckBox_ConBack)
-        Me.TabPage_Options.Controls.Add(Me.CheckBox_ConLost)
-        Me.TabPage_Options.Location = New System.Drawing.Point(4, 24)
-        Me.TabPage_Options.Name = "TabPage_Options"
-        Me.TabPage_Options.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage_Options.Size = New System.Drawing.Size(593, 428)
-        Me.TabPage_Options.TabIndex = 2
-        Me.TabPage_Options.Text = "Options"
-        Me.TabPage_Options.UseVisualStyleBackColor = True
+        Me.CheckBox_Notify.AutoSize = True
+        Me.CheckBox_Notify.Checked = True
+        Me.CheckBox_Notify.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_Notify.Location = New System.Drawing.Point(8, 75)
+        Me.CheckBox_Notify.Name = "CheckBox_Notify"
+        Me.CheckBox_Notify.Size = New System.Drawing.Size(311, 19)
+        Me.CheckBox_Notify.TabIndex = 5
+        Me.CheckBox_Notify.Text = "Show notification if connection is lost or reestablished"
+        Me.CheckBox_Notify.UseVisualStyleBackColor = True
         '
-        'CheckBox_ConLost
+        'CheckBox_LogSave
         '
-        Me.CheckBox_ConLost.AutoSize = True
-        Me.CheckBox_ConLost.Checked = True
-        Me.CheckBox_ConLost.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox_ConLost.Location = New System.Drawing.Point(8, 16)
-        Me.CheckBox_ConLost.Name = "CheckBox_ConLost"
-        Me.CheckBox_ConLost.Size = New System.Drawing.Size(150, 19)
-        Me.CheckBox_ConLost.TabIndex = 0
-        Me.CheckBox_ConLost.Text = "Connection lost Sound:"
-        Me.CheckBox_ConLost.UseVisualStyleBackColor = True
-        '
-        'CheckBox_ConBack
-        '
-        Me.CheckBox_ConBack.AutoSize = True
-        Me.CheckBox_ConBack.Checked = True
-        Me.CheckBox_ConBack.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox_ConBack.Location = New System.Drawing.Point(8, 45)
-        Me.CheckBox_ConBack.Name = "CheckBox_ConBack"
-        Me.CheckBox_ConBack.Size = New System.Drawing.Size(200, 19)
-        Me.CheckBox_ConBack.TabIndex = 1
-        Me.CheckBox_ConBack.Text = "Connection reestablished Sound:"
-        Me.CheckBox_ConBack.UseVisualStyleBackColor = True
-        '
-        'TextBox_ConBack
-        '
-        Me.TextBox_ConBack.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_ConBack.Location = New System.Drawing.Point(243, 43)
-        Me.TextBox_ConBack.Name = "TextBox_ConBack"
-        Me.TextBox_ConBack.Size = New System.Drawing.Size(344, 23)
-        Me.TextBox_ConBack.TabIndex = 2
-        '
-        'TextBox_ConLost
-        '
-        Me.TextBox_ConLost.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_ConLost.Location = New System.Drawing.Point(243, 14)
-        Me.TextBox_ConLost.Name = "TextBox_ConLost"
-        Me.TextBox_ConLost.Size = New System.Drawing.Size(344, 23)
-        Me.TextBox_ConLost.TabIndex = 3
-        '
-        'CheckBox_WinStart
-        '
-        Me.CheckBox_WinStart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox_WinStart.AutoSize = True
-        Me.CheckBox_WinStart.Location = New System.Drawing.Point(8, 403)
-        Me.CheckBox_WinStart.Name = "CheckBox_WinStart"
-        Me.CheckBox_WinStart.Size = New System.Drawing.Size(159, 19)
-        Me.CheckBox_WinStart.TabIndex = 4
-        Me.CheckBox_WinStart.Text = "Start on Windows startup"
-        Me.CheckBox_WinStart.UseVisualStyleBackColor = True
-        '
-        'ColumnHeader1
-        '
-        Me.ColumnHeader1.Text = "Connection lost"
-        Me.ColumnHeader1.Width = 200
-        '
-        'ColumnHeader2
-        '
-        Me.ColumnHeader2.Text = "Connection reestablished"
-        Me.ColumnHeader2.Width = 200
-        '
-        'ColumnHeader3
-        '
-        Me.ColumnHeader3.Text = "Duration"
-        Me.ColumnHeader3.Width = 150
+        Me.CheckBox_LogSave.AutoSize = True
+        Me.CheckBox_LogSave.Checked = True
+        Me.CheckBox_LogSave.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_LogSave.Location = New System.Drawing.Point(8, 104)
+        Me.CheckBox_LogSave.Name = "CheckBox_LogSave"
+        Me.CheckBox_LogSave.Size = New System.Drawing.Size(94, 19)
+        Me.CheckBox_LogSave.TabIndex = 6
+        Me.CheckBox_LogSave.Text = "Save log files"
+        Me.CheckBox_LogSave.UseVisualStyleBackColor = True
         '
         'Form_Main
         '
@@ -238,9 +266,9 @@ Partial Class Form_Main
         Me.TabControl_Main.ResumeLayout(False)
         Me.TabPage_Overview.ResumeLayout(False)
         Me.TabPage_Overview.PerformLayout()
-        Me.TabPage_Log.ResumeLayout(False)
         Me.TabPage_Options.ResumeLayout(False)
         Me.TabPage_Options.PerformLayout()
+        Me.TabPage_Log.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -263,4 +291,6 @@ Partial Class Form_Main
     Friend WithEvents ColumnHeader1 As ColumnHeader
     Friend WithEvents ColumnHeader2 As ColumnHeader
     Friend WithEvents ColumnHeader3 As ColumnHeader
+    Friend WithEvents CheckBox_Notify As CheckBox
+    Friend WithEvents CheckBox_LogSave As CheckBox
 End Class
