@@ -1,11 +1,11 @@
 ﻿Imports System.Net.NetworkInformation
 
-Public Class Form1
+Public Class Form_Main
     Dim Lost_Connection As Boolean = False
     Dim TempAbbruch As Abbruch = Nothing
     Dim ListOfAbbruch As List(Of Abbruch)
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Select Case Button1.Text
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button_CheckButton.Click
+        Select Case Button_CheckButton.Text
             Case "Start checking"
                 DeReActivatedChecking(True)
             Case "Stop checking"
@@ -17,7 +17,7 @@ Public Class Form1
 
     Private Sub DeReActivatedChecking(state As Boolean)
         Timer1.Enabled = state
-        Button1.Text = If(state, "Stop checking", "Start checking")
+        Button_CheckButton.Text = If(state, "Stop checking", "Start checking")
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
@@ -36,6 +36,10 @@ Public Class Form1
         Lost_Connection = True
         TempAbbruch = New Abbruch(DateTime.Now)
     End Sub
+
+    Private Function AddDate(ByVal Text As String)
+
+    End Function
 
     Private Sub Connection_Existent()
         If Lost_Connection AndAlso Not IsNothing(TempAbbruch) Then

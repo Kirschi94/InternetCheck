@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class Form1
+Partial Class Form_Main
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,113 +23,113 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-        Me.ListView1 = New System.Windows.Forms.ListView()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
+        Me.ListView_Losses = New System.Windows.Forms.ListView()
+        Me.Label_Losses = New System.Windows.Forms.Label()
+        Me.Button_CheckButton = New System.Windows.Forms.Button()
+        Me.TabControl_Main = New System.Windows.Forms.TabControl()
+        Me.TabPage_Overview = New System.Windows.Forms.TabPage()
+        Me.TabPage_Log = New System.Windows.Forms.TabPage()
+        Me.RichTextBox_Log = New System.Windows.Forms.RichTextBox()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.TabPage_Options = New System.Windows.Forms.TabPage()
+        Me.CheckBox_ConLost = New System.Windows.Forms.CheckBox()
+        Me.CheckBox_ConBack = New System.Windows.Forms.CheckBox()
+        Me.TextBox_ConBack = New System.Windows.Forms.TextBox()
+        Me.TextBox_ConLost = New System.Windows.Forms.TextBox()
+        Me.CheckBox_WinStart = New System.Windows.Forms.CheckBox()
         Me.ColumnHeader1 = New System.Windows.Forms.ColumnHeader()
         Me.ColumnHeader2 = New System.Windows.Forms.ColumnHeader()
         Me.ColumnHeader3 = New System.Windows.Forms.ColumnHeader()
-        Me.TabControl1.SuspendLayout()
-        Me.TabPage1.SuspendLayout()
-        Me.TabPage2.SuspendLayout()
-        Me.TabPage3.SuspendLayout()
+        Me.TabControl_Main.SuspendLayout()
+        Me.TabPage_Overview.SuspendLayout()
+        Me.TabPage_Log.SuspendLayout()
+        Me.TabPage_Options.SuspendLayout()
         Me.SuspendLayout()
         '
-        'ListView1
+        'ListView_Losses
         '
-        Me.ListView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.ListView_Losses.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3})
-        Me.ListView1.HideSelection = False
-        Me.ListView1.Location = New System.Drawing.Point(8, 21)
-        Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(579, 372)
-        Me.ListView1.TabIndex = 0
-        Me.ListView1.UseCompatibleStateImageBehavior = False
-        Me.ListView1.View = System.Windows.Forms.View.Details
+        Me.ListView_Losses.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3})
+        Me.ListView_Losses.HideSelection = False
+        Me.ListView_Losses.Location = New System.Drawing.Point(8, 21)
+        Me.ListView_Losses.Name = "ListView_Losses"
+        Me.ListView_Losses.Size = New System.Drawing.Size(579, 372)
+        Me.ListView_Losses.TabIndex = 0
+        Me.ListView_Losses.UseCompatibleStateImageBehavior = False
+        Me.ListView_Losses.View = System.Windows.Forms.View.Details
         '
-        'Label1
+        'Label_Losses
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(8, 3)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(44, 15)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Losses:"
+        Me.Label_Losses.AutoSize = True
+        Me.Label_Losses.Location = New System.Drawing.Point(8, 3)
+        Me.Label_Losses.Name = "Label_Losses"
+        Me.Label_Losses.Size = New System.Drawing.Size(44, 15)
+        Me.Label_Losses.TabIndex = 1
+        Me.Label_Losses.Text = "Losses:"
         '
-        'Button1
+        'Button_CheckButton
         '
-        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Location = New System.Drawing.Point(481, 399)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(106, 23)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Start checking"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button_CheckButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button_CheckButton.Location = New System.Drawing.Point(481, 399)
+        Me.Button_CheckButton.Name = "Button_CheckButton"
+        Me.Button_CheckButton.Size = New System.Drawing.Size(106, 23)
+        Me.Button_CheckButton.TabIndex = 2
+        Me.Button_CheckButton.Text = "Start checking"
+        Me.Button_CheckButton.UseVisualStyleBackColor = True
         '
-        'TabControl1
+        'TabControl_Main
         '
-        Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.TabControl_Main.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TabControl1.Controls.Add(Me.TabPage1)
-        Me.TabControl1.Controls.Add(Me.TabPage3)
-        Me.TabControl1.Controls.Add(Me.TabPage2)
-        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(601, 456)
-        Me.TabControl1.TabIndex = 3
+        Me.TabControl_Main.Controls.Add(Me.TabPage_Overview)
+        Me.TabControl_Main.Controls.Add(Me.TabPage_Options)
+        Me.TabControl_Main.Controls.Add(Me.TabPage_Log)
+        Me.TabControl_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TabControl_Main.Name = "TabControl_Main"
+        Me.TabControl_Main.SelectedIndex = 0
+        Me.TabControl_Main.Size = New System.Drawing.Size(601, 456)
+        Me.TabControl_Main.TabIndex = 3
         '
-        'TabPage1
+        'TabPage_Overview
         '
-        Me.TabPage1.Controls.Add(Me.Label1)
-        Me.TabPage1.Controls.Add(Me.Button1)
-        Me.TabPage1.Controls.Add(Me.ListView1)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 24)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(593, 428)
-        Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Overview"
-        Me.TabPage1.UseVisualStyleBackColor = True
+        Me.TabPage_Overview.Controls.Add(Me.Label_Losses)
+        Me.TabPage_Overview.Controls.Add(Me.Button_CheckButton)
+        Me.TabPage_Overview.Controls.Add(Me.ListView_Losses)
+        Me.TabPage_Overview.Location = New System.Drawing.Point(4, 24)
+        Me.TabPage_Overview.Name = "TabPage_Overview"
+        Me.TabPage_Overview.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage_Overview.Size = New System.Drawing.Size(593, 428)
+        Me.TabPage_Overview.TabIndex = 0
+        Me.TabPage_Overview.Text = "Overview"
+        Me.TabPage_Overview.UseVisualStyleBackColor = True
         '
-        'TabPage2
+        'TabPage_Log
         '
-        Me.TabPage2.Controls.Add(Me.RichTextBox1)
-        Me.TabPage2.Location = New System.Drawing.Point(4, 24)
-        Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(593, 428)
-        Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "Log"
-        Me.TabPage2.UseVisualStyleBackColor = True
+        Me.TabPage_Log.Controls.Add(Me.RichTextBox_Log)
+        Me.TabPage_Log.Location = New System.Drawing.Point(4, 24)
+        Me.TabPage_Log.Name = "TabPage_Log"
+        Me.TabPage_Log.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage_Log.Size = New System.Drawing.Size(593, 428)
+        Me.TabPage_Log.TabIndex = 1
+        Me.TabPage_Log.Text = "Log"
+        Me.TabPage_Log.UseVisualStyleBackColor = True
         '
-        'RichTextBox1
+        'RichTextBox_Log
         '
-        Me.RichTextBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.RichTextBox_Log.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.RichTextBox1.Location = New System.Drawing.Point(8, 6)
-        Me.RichTextBox1.Name = "RichTextBox1"
-        Me.RichTextBox1.ReadOnly = True
-        Me.RichTextBox1.Size = New System.Drawing.Size(579, 416)
-        Me.RichTextBox1.TabIndex = 0
-        Me.RichTextBox1.Text = ""
+        Me.RichTextBox_Log.Location = New System.Drawing.Point(8, 6)
+        Me.RichTextBox_Log.Name = "RichTextBox_Log"
+        Me.RichTextBox_Log.ReadOnly = True
+        Me.RichTextBox_Log.Size = New System.Drawing.Size(579, 416)
+        Me.RichTextBox_Log.TabIndex = 0
+        Me.RichTextBox_Log.Text = ""
         '
         'NotifyIcon1
         '
@@ -141,69 +141,73 @@ Partial Class Form1
         '
         Me.Timer1.Interval = 60000
         '
-        'TabPage3
+        'TabPage_Options
         '
-        Me.TabPage3.Controls.Add(Me.CheckBox3)
-        Me.TabPage3.Controls.Add(Me.TextBox2)
-        Me.TabPage3.Controls.Add(Me.TextBox1)
-        Me.TabPage3.Controls.Add(Me.CheckBox2)
-        Me.TabPage3.Controls.Add(Me.CheckBox1)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 24)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(593, 428)
-        Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Options"
-        Me.TabPage3.UseVisualStyleBackColor = True
+        Me.TabPage_Options.Controls.Add(Me.CheckBox_WinStart)
+        Me.TabPage_Options.Controls.Add(Me.TextBox_ConLost)
+        Me.TabPage_Options.Controls.Add(Me.TextBox_ConBack)
+        Me.TabPage_Options.Controls.Add(Me.CheckBox_ConBack)
+        Me.TabPage_Options.Controls.Add(Me.CheckBox_ConLost)
+        Me.TabPage_Options.Location = New System.Drawing.Point(4, 24)
+        Me.TabPage_Options.Name = "TabPage_Options"
+        Me.TabPage_Options.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage_Options.Size = New System.Drawing.Size(593, 428)
+        Me.TabPage_Options.TabIndex = 2
+        Me.TabPage_Options.Text = "Options"
+        Me.TabPage_Options.UseVisualStyleBackColor = True
         '
-        'CheckBox1
+        'CheckBox_ConLost
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(8, 16)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(150, 19)
-        Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = "Connection lost Sound:"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.CheckBox_ConLost.AutoSize = True
+        Me.CheckBox_ConLost.Checked = True
+        Me.CheckBox_ConLost.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_ConLost.Location = New System.Drawing.Point(8, 16)
+        Me.CheckBox_ConLost.Name = "CheckBox_ConLost"
+        Me.CheckBox_ConLost.Size = New System.Drawing.Size(150, 19)
+        Me.CheckBox_ConLost.TabIndex = 0
+        Me.CheckBox_ConLost.Text = "Connection lost Sound:"
+        Me.CheckBox_ConLost.UseVisualStyleBackColor = True
         '
-        'CheckBox2
+        'CheckBox_ConBack
         '
-        Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(8, 45)
-        Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(200, 19)
-        Me.CheckBox2.TabIndex = 1
-        Me.CheckBox2.Text = "Connection reestablished Sound:"
-        Me.CheckBox2.UseVisualStyleBackColor = True
+        Me.CheckBox_ConBack.AutoSize = True
+        Me.CheckBox_ConBack.Checked = True
+        Me.CheckBox_ConBack.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_ConBack.Location = New System.Drawing.Point(8, 45)
+        Me.CheckBox_ConBack.Name = "CheckBox_ConBack"
+        Me.CheckBox_ConBack.Size = New System.Drawing.Size(200, 19)
+        Me.CheckBox_ConBack.TabIndex = 1
+        Me.CheckBox_ConBack.Text = "Connection reestablished Sound:"
+        Me.CheckBox_ConBack.UseVisualStyleBackColor = True
         '
-        'TextBox1
+        'TextBox_ConBack
         '
-        Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TextBox_ConBack.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox1.Location = New System.Drawing.Point(243, 43)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(344, 23)
-        Me.TextBox1.TabIndex = 2
+        Me.TextBox_ConBack.Location = New System.Drawing.Point(243, 43)
+        Me.TextBox_ConBack.Name = "TextBox_ConBack"
+        Me.TextBox_ConBack.Size = New System.Drawing.Size(344, 23)
+        Me.TextBox_ConBack.TabIndex = 2
         '
-        'TextBox2
+        'TextBox_ConLost
         '
-        Me.TextBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TextBox_ConLost.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox2.Location = New System.Drawing.Point(243, 14)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(344, 23)
-        Me.TextBox2.TabIndex = 3
+        Me.TextBox_ConLost.Location = New System.Drawing.Point(243, 14)
+        Me.TextBox_ConLost.Name = "TextBox_ConLost"
+        Me.TextBox_ConLost.Size = New System.Drawing.Size(344, 23)
+        Me.TextBox_ConLost.TabIndex = 3
         '
-        'CheckBox3
+        'CheckBox_WinStart
         '
-        Me.CheckBox3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(8, 403)
-        Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(159, 19)
-        Me.CheckBox3.TabIndex = 4
-        Me.CheckBox3.Text = "Start on Windows startup"
-        Me.CheckBox3.UseVisualStyleBackColor = True
+        Me.CheckBox_WinStart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox_WinStart.AutoSize = True
+        Me.CheckBox_WinStart.Location = New System.Drawing.Point(8, 403)
+        Me.CheckBox_WinStart.Name = "CheckBox_WinStart"
+        Me.CheckBox_WinStart.Size = New System.Drawing.Size(159, 19)
+        Me.CheckBox_WinStart.TabIndex = 4
+        Me.CheckBox_WinStart.Text = "Start on Windows startup"
+        Me.CheckBox_WinStart.UseVisualStyleBackColor = True
         '
         'ColumnHeader1
         '
@@ -220,42 +224,42 @@ Partial Class Form1
         Me.ColumnHeader3.Text = "Duration"
         Me.ColumnHeader3.Width = 150
         '
-        'Form1
+        'Form_Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(613, 468)
-        Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.TabControl_Main)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimumSize = New System.Drawing.Size(377, 347)
-        Me.Name = "Form1"
+        Me.Name = "Form_Main"
         Me.Text = "InternetCheck"
-        Me.TabControl1.ResumeLayout(False)
-        Me.TabPage1.ResumeLayout(False)
-        Me.TabPage1.PerformLayout()
-        Me.TabPage2.ResumeLayout(False)
-        Me.TabPage3.ResumeLayout(False)
-        Me.TabPage3.PerformLayout()
+        Me.TabControl_Main.ResumeLayout(False)
+        Me.TabPage_Overview.ResumeLayout(False)
+        Me.TabPage_Overview.PerformLayout()
+        Me.TabPage_Log.ResumeLayout(False)
+        Me.TabPage_Options.ResumeLayout(False)
+        Me.TabPage_Options.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
 
-    Friend WithEvents ListView1 As ListView
-    Friend WithEvents Label1 As Label
-    Friend WithEvents Button1 As Button
-    Friend WithEvents TabControl1 As TabControl
-    Friend WithEvents TabPage1 As TabPage
-    Friend WithEvents TabPage2 As TabPage
-    Friend WithEvents RichTextBox1 As RichTextBox
+    Friend WithEvents ListView_Losses As ListView
+    Friend WithEvents Label_Losses As Label
+    Friend WithEvents Button_CheckButton As Button
+    Friend WithEvents TabControl_Main As TabControl
+    Friend WithEvents TabPage_Overview As TabPage
+    Friend WithEvents TabPage_Log As TabPage
+    Friend WithEvents RichTextBox_Log As RichTextBox
     Friend WithEvents NotifyIcon1 As NotifyIcon
     Friend WithEvents Timer1 As Timer
-    Friend WithEvents TabPage3 As TabPage
-    Friend WithEvents TextBox2 As TextBox
-    Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents CheckBox2 As CheckBox
-    Friend WithEvents CheckBox1 As CheckBox
-    Friend WithEvents CheckBox3 As CheckBox
+    Friend WithEvents TabPage_Options As TabPage
+    Friend WithEvents TextBox_ConLost As TextBox
+    Friend WithEvents TextBox_ConBack As TextBox
+    Friend WithEvents CheckBox_ConBack As CheckBox
+    Friend WithEvents CheckBox_ConLost As CheckBox
+    Friend WithEvents CheckBox_WinStart As CheckBox
     Friend WithEvents ColumnHeader1 As ColumnHeader
     Friend WithEvents ColumnHeader2 As ColumnHeader
     Friend WithEvents ColumnHeader3 As ColumnHeader
