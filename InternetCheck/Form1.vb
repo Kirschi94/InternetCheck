@@ -21,11 +21,11 @@ Public Class Form_Main
     End Sub
 
     Private Sub DeReActivatedChecking(state As Boolean)
-        Timer_.Enabled = state
+        TheTimer.Enabled = state
         Button_CheckButton.Text = If(state, "Stop checking", "Start checking")
     End Sub
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer_.Tick
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles TheTimer.Tick
         CheckConnection()
     End Sub
 
@@ -68,9 +68,9 @@ Public Class Form_Main
     End Sub
 
     Private Sub ShowBalloonTip(Optional Title As String = "", Optional Text As String = "")
-        NotifyIcon_.BalloonTipTitle = Title
-        NotifyIcon_.BalloonTipText = Text
-        NotifyIcon_.ShowBalloonTip(8000)
+        TheNotifyIcon.BalloonTipTitle = Title
+        TheNotifyIcon.BalloonTipText = Text
+        TheNotifyIcon.ShowBalloonTip(8000)
     End Sub
 
     Private Sub PlayStandard(Lost As Boolean)
@@ -314,5 +314,17 @@ Public Class Form_Main
             Button_Debug.Text = "Reestablish Connection [DEBUG]"
             Abbruchtest = True
         End If
+    End Sub
+
+    Private Sub Form_Main_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If WindowState = FormWindowState.Minimized Then
+            Visible = False
+        Else Visible = True
+        End If
+    End Sub
+
+    Private Sub TheNotifyIcon_DoubleClick(sender As Object, e As EventArgs) Handles TheNotifyIcon.DoubleClick
+        Show()
+        WindowState = FormWindowState.Normal
     End Sub
 End Class

@@ -34,6 +34,7 @@ Partial Class Form_Main
         Me.TabPage_Overview = New System.Windows.Forms.TabPage()
         Me.Button_Debug = New System.Windows.Forms.Button()
         Me.TabPage_Options = New System.Windows.Forms.TabPage()
+        Me.CheckBox_StartMin = New System.Windows.Forms.CheckBox()
         Me.CheckBox_Autostart = New System.Windows.Forms.CheckBox()
         Me.CheckBox_LogSave = New System.Windows.Forms.CheckBox()
         Me.CheckBox_Notify = New System.Windows.Forms.CheckBox()
@@ -44,8 +45,8 @@ Partial Class Form_Main
         Me.CheckBox_ConLost = New System.Windows.Forms.CheckBox()
         Me.TabPage_Log = New System.Windows.Forms.TabPage()
         Me.RichTextBox_Log = New System.Windows.Forms.RichTextBox()
-        Me.NotifyIcon_ = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.Timer_ = New System.Windows.Forms.Timer(Me.components)
+        Me.TheNotifyIcon = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.TheTimer = New System.Windows.Forms.Timer(Me.components)
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
         Me.TabPage_Options.SuspendLayout()
@@ -142,6 +143,7 @@ Partial Class Form_Main
         '
         'TabPage_Options
         '
+        Me.TabPage_Options.Controls.Add(Me.CheckBox_StartMin)
         Me.TabPage_Options.Controls.Add(Me.CheckBox_Autostart)
         Me.TabPage_Options.Controls.Add(Me.CheckBox_LogSave)
         Me.TabPage_Options.Controls.Add(Me.CheckBox_Notify)
@@ -157,6 +159,16 @@ Partial Class Form_Main
         Me.TabPage_Options.TabIndex = 2
         Me.TabPage_Options.Text = "Options"
         Me.TabPage_Options.UseVisualStyleBackColor = True
+        '
+        'CheckBox_StartMin
+        '
+        Me.CheckBox_StartMin.AutoSize = True
+        Me.CheckBox_StartMin.Location = New System.Drawing.Point(8, 162)
+        Me.CheckBox_StartMin.Name = "CheckBox_StartMin"
+        Me.CheckBox_StartMin.Size = New System.Drawing.Size(109, 19)
+        Me.CheckBox_StartMin.TabIndex = 8
+        Me.CheckBox_StartMin.Text = "Start minimized"
+        Me.CheckBox_StartMin.UseVisualStyleBackColor = True
         '
         'CheckBox_Autostart
         '
@@ -269,15 +281,15 @@ Partial Class Form_Main
         Me.RichTextBox_Log.TabIndex = 0
         Me.RichTextBox_Log.Text = ""
         '
-        'NotifyIcon_
+        'TheNotifyIcon
         '
-        Me.NotifyIcon_.Icon = CType(resources.GetObject("NotifyIcon_.Icon"), System.Drawing.Icon)
-        Me.NotifyIcon_.Text = "InternetCheck"
-        Me.NotifyIcon_.Visible = True
+        Me.TheNotifyIcon.Icon = CType(resources.GetObject("TheNotifyIcon.Icon"), System.Drawing.Icon)
+        Me.TheNotifyIcon.Text = "InternetCheck"
+        Me.TheNotifyIcon.Visible = True
         '
-        'Timer_
+        'TheTimer
         '
-        Me.Timer_.Interval = 12000
+        Me.TheTimer.Interval = 12000
         '
         'Form_Main
         '
@@ -307,8 +319,8 @@ Partial Class Form_Main
     Friend WithEvents TabPage_Overview As TabPage
     Friend WithEvents TabPage_Log As TabPage
     Friend WithEvents RichTextBox_Log As RichTextBox
-    Friend WithEvents NotifyIcon_ As NotifyIcon
-    Friend WithEvents Timer_ As Timer
+    Friend WithEvents TheNotifyIcon As NotifyIcon
+    Friend WithEvents TheTimer As Timer
     Friend WithEvents TabPage_Options As TabPage
     Friend WithEvents TextBox_ConLost As TextBox
     Friend WithEvents TextBox_ConBack As TextBox
@@ -322,4 +334,5 @@ Partial Class Form_Main
     Friend WithEvents CheckBox_LogSave As CheckBox
     Friend WithEvents Button_Debug As Button
     Friend WithEvents CheckBox_Autostart As CheckBox
+    Friend WithEvents CheckBox_StartMin As CheckBox
 End Class
