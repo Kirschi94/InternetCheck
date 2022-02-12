@@ -34,6 +34,7 @@ Partial Class Form_Main
         Me.TabPage_Overview = New System.Windows.Forms.TabPage()
         Me.Button_Debug = New System.Windows.Forms.Button()
         Me.TabPage_Options = New System.Windows.Forms.TabPage()
+        Me.CheckBox_Autostart = New System.Windows.Forms.CheckBox()
         Me.CheckBox_LogSave = New System.Windows.Forms.CheckBox()
         Me.CheckBox_Notify = New System.Windows.Forms.CheckBox()
         Me.CheckBox_WinStart = New System.Windows.Forms.CheckBox()
@@ -45,7 +46,6 @@ Partial Class Form_Main
         Me.RichTextBox_Log = New System.Windows.Forms.RichTextBox()
         Me.NotifyIcon_ = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.Timer_ = New System.Windows.Forms.Timer(Me.components)
-        Me.CheckBox_Autostart = New System.Windows.Forms.CheckBox()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
         Me.TabPage_Options.SuspendLayout()
@@ -156,6 +156,16 @@ Partial Class Form_Main
         Me.TabPage_Options.Text = "Options"
         Me.TabPage_Options.UseVisualStyleBackColor = True
         '
+        'CheckBox_Autostart
+        '
+        Me.CheckBox_Autostart.AutoSize = True
+        Me.CheckBox_Autostart.Location = New System.Drawing.Point(8, 133)
+        Me.CheckBox_Autostart.Name = "CheckBox_Autostart"
+        Me.CheckBox_Autostart.Size = New System.Drawing.Size(409, 19)
+        Me.CheckBox_Autostart.TabIndex = 7
+        Me.CheckBox_Autostart.Text = "Automatically start checking the internet connection on program launch"
+        Me.CheckBox_Autostart.UseVisualStyleBackColor = True
+        '
         'CheckBox_LogSave
         '
         Me.CheckBox_LogSave.AutoSize = True
@@ -184,6 +194,7 @@ Partial Class Form_Main
         '
         Me.CheckBox_WinStart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox_WinStart.AutoSize = True
+        Me.CheckBox_WinStart.Enabled = False
         Me.CheckBox_WinStart.Location = New System.Drawing.Point(8, 403)
         Me.CheckBox_WinStart.Name = "CheckBox_WinStart"
         Me.CheckBox_WinStart.Size = New System.Drawing.Size(159, 19)
@@ -265,16 +276,6 @@ Partial Class Form_Main
         'Timer_
         '
         Me.Timer_.Interval = 12000
-        '
-        'CheckBox_Autostart
-        '
-        Me.CheckBox_Autostart.AutoSize = True
-        Me.CheckBox_Autostart.Location = New System.Drawing.Point(8, 133)
-        Me.CheckBox_Autostart.Name = "CheckBox_Autostart"
-        Me.CheckBox_Autostart.Size = New System.Drawing.Size(409, 19)
-        Me.CheckBox_Autostart.TabIndex = 7
-        Me.CheckBox_Autostart.Text = "Automatically start checking the internet connection on program launch"
-        Me.CheckBox_Autostart.UseVisualStyleBackColor = True
         '
         'Form_Main
         '
