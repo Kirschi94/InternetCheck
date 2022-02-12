@@ -131,12 +131,14 @@ Partial Class Form_Main
         'Button_Debug
         '
         Me.Button_Debug.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button_Debug.Enabled = False
         Me.Button_Debug.Location = New System.Drawing.Point(8, 399)
         Me.Button_Debug.Name = "Button_Debug"
         Me.Button_Debug.Size = New System.Drawing.Size(223, 23)
         Me.Button_Debug.TabIndex = 4
         Me.Button_Debug.Text = "Lose Connection [DEBUG]"
         Me.Button_Debug.UseVisualStyleBackColor = True
+        Me.Button_Debug.Visible = False
         '
         'TabPage_Options
         '
