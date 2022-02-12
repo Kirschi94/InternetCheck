@@ -24,6 +24,12 @@
         Anfang = Begin
     End Sub
 
+    Public Sub New(Begin As DateTime, Duration As TimeSpan)
+        Anfang = Begin
+        Ende = Begin + Duration
+        Dauer = Duration
+    End Sub
+
     Private Sub New(Begin As DateTime, TheEnd As DateTime, Duration As TimeSpan)
         Anfang = Begin
         Ende = TheEnd

@@ -4,9 +4,11 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>InternetCheck</RootNamespace>
-    <StartupObject>Sub Main</StartupObject>
+    <StartupObject>InternetCheck.Form_Main</StartupObject>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>AK-Logo-2020-Hell_kein_Schatten.ico</ApplicationIcon>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+    <Version>0.9.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
