@@ -32,7 +32,10 @@ Partial Class Form_Main
         Me.Button_CheckButton = New System.Windows.Forms.Button()
         Me.TabControl_Main = New System.Windows.Forms.TabControl()
         Me.TabPage_Overview = New System.Windows.Forms.TabPage()
+        Me.Button_Debug = New System.Windows.Forms.Button()
         Me.TabPage_Options = New System.Windows.Forms.TabPage()
+        Me.CheckBox_LogSave = New System.Windows.Forms.CheckBox()
+        Me.CheckBox_Notify = New System.Windows.Forms.CheckBox()
         Me.CheckBox_WinStart = New System.Windows.Forms.CheckBox()
         Me.TextBox_ConLost = New System.Windows.Forms.TextBox()
         Me.TextBox_ConBack = New System.Windows.Forms.TextBox()
@@ -40,10 +43,9 @@ Partial Class Form_Main
         Me.CheckBox_ConLost = New System.Windows.Forms.CheckBox()
         Me.TabPage_Log = New System.Windows.Forms.TabPage()
         Me.RichTextBox_Log = New System.Windows.Forms.RichTextBox()
-        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.CheckBox_Notify = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_LogSave = New System.Windows.Forms.CheckBox()
+        Me.NotifyIcon_ = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.Timer_ = New System.Windows.Forms.Timer(Me.components)
+        Me.CheckBox_Autostart = New System.Windows.Forms.CheckBox()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
         Me.TabPage_Options.SuspendLayout()
@@ -114,6 +116,7 @@ Partial Class Form_Main
         '
         'TabPage_Overview
         '
+        Me.TabPage_Overview.Controls.Add(Me.Button_Debug)
         Me.TabPage_Overview.Controls.Add(Me.Label_Losses)
         Me.TabPage_Overview.Controls.Add(Me.Button_CheckButton)
         Me.TabPage_Overview.Controls.Add(Me.ListView_Losses)
@@ -125,8 +128,19 @@ Partial Class Form_Main
         Me.TabPage_Overview.Text = "Overview"
         Me.TabPage_Overview.UseVisualStyleBackColor = True
         '
+        'Button_Debug
+        '
+        Me.Button_Debug.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button_Debug.Location = New System.Drawing.Point(8, 399)
+        Me.Button_Debug.Name = "Button_Debug"
+        Me.Button_Debug.Size = New System.Drawing.Size(223, 23)
+        Me.Button_Debug.TabIndex = 4
+        Me.Button_Debug.Text = "Lose Connection [DEBUG]"
+        Me.Button_Debug.UseVisualStyleBackColor = True
+        '
         'TabPage_Options
         '
+        Me.TabPage_Options.Controls.Add(Me.CheckBox_Autostart)
         Me.TabPage_Options.Controls.Add(Me.CheckBox_LogSave)
         Me.TabPage_Options.Controls.Add(Me.CheckBox_Notify)
         Me.TabPage_Options.Controls.Add(Me.CheckBox_WinStart)
@@ -141,6 +155,30 @@ Partial Class Form_Main
         Me.TabPage_Options.TabIndex = 2
         Me.TabPage_Options.Text = "Options"
         Me.TabPage_Options.UseVisualStyleBackColor = True
+        '
+        'CheckBox_LogSave
+        '
+        Me.CheckBox_LogSave.AutoSize = True
+        Me.CheckBox_LogSave.Checked = True
+        Me.CheckBox_LogSave.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_LogSave.Location = New System.Drawing.Point(8, 104)
+        Me.CheckBox_LogSave.Name = "CheckBox_LogSave"
+        Me.CheckBox_LogSave.Size = New System.Drawing.Size(94, 19)
+        Me.CheckBox_LogSave.TabIndex = 6
+        Me.CheckBox_LogSave.Text = "Save log files"
+        Me.CheckBox_LogSave.UseVisualStyleBackColor = True
+        '
+        'CheckBox_Notify
+        '
+        Me.CheckBox_Notify.AutoSize = True
+        Me.CheckBox_Notify.Checked = True
+        Me.CheckBox_Notify.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_Notify.Location = New System.Drawing.Point(8, 75)
+        Me.CheckBox_Notify.Name = "CheckBox_Notify"
+        Me.CheckBox_Notify.Size = New System.Drawing.Size(311, 19)
+        Me.CheckBox_Notify.TabIndex = 5
+        Me.CheckBox_Notify.Text = "Show notification if connection is lost or reestablished"
+        Me.CheckBox_Notify.UseVisualStyleBackColor = True
         '
         'CheckBox_WinStart
         '
@@ -218,39 +256,25 @@ Partial Class Form_Main
         Me.RichTextBox_Log.TabIndex = 0
         Me.RichTextBox_Log.Text = ""
         '
-        'NotifyIcon1
+        'NotifyIcon_
         '
-        Me.NotifyIcon1.Icon = CType(resources.GetObject("NotifyIcon1.Icon"), System.Drawing.Icon)
-        Me.NotifyIcon1.Text = "InternetCheck"
-        Me.NotifyIcon1.Visible = True
+        Me.NotifyIcon_.Icon = CType(resources.GetObject("NotifyIcon_.Icon"), System.Drawing.Icon)
+        Me.NotifyIcon_.Text = "InternetCheck"
+        Me.NotifyIcon_.Visible = True
         '
-        'Timer1
+        'Timer_
         '
-        Me.Timer1.Interval = 60000
+        Me.Timer_.Interval = 12000
         '
-        'CheckBox_Notify
+        'CheckBox_Autostart
         '
-        Me.CheckBox_Notify.AutoSize = True
-        Me.CheckBox_Notify.Checked = True
-        Me.CheckBox_Notify.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox_Notify.Location = New System.Drawing.Point(8, 75)
-        Me.CheckBox_Notify.Name = "CheckBox_Notify"
-        Me.CheckBox_Notify.Size = New System.Drawing.Size(311, 19)
-        Me.CheckBox_Notify.TabIndex = 5
-        Me.CheckBox_Notify.Text = "Show notification if connection is lost or reestablished"
-        Me.CheckBox_Notify.UseVisualStyleBackColor = True
-        '
-        'CheckBox_LogSave
-        '
-        Me.CheckBox_LogSave.AutoSize = True
-        Me.CheckBox_LogSave.Checked = True
-        Me.CheckBox_LogSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox_LogSave.Location = New System.Drawing.Point(8, 104)
-        Me.CheckBox_LogSave.Name = "CheckBox_LogSave"
-        Me.CheckBox_LogSave.Size = New System.Drawing.Size(94, 19)
-        Me.CheckBox_LogSave.TabIndex = 6
-        Me.CheckBox_LogSave.Text = "Save log files"
-        Me.CheckBox_LogSave.UseVisualStyleBackColor = True
+        Me.CheckBox_Autostart.AutoSize = True
+        Me.CheckBox_Autostart.Location = New System.Drawing.Point(8, 133)
+        Me.CheckBox_Autostart.Name = "CheckBox_Autostart"
+        Me.CheckBox_Autostart.Size = New System.Drawing.Size(409, 19)
+        Me.CheckBox_Autostart.TabIndex = 7
+        Me.CheckBox_Autostart.Text = "Automatically start checking the internet connection on program launch"
+        Me.CheckBox_Autostart.UseVisualStyleBackColor = True
         '
         'Form_Main
         '
@@ -280,8 +304,8 @@ Partial Class Form_Main
     Friend WithEvents TabPage_Overview As TabPage
     Friend WithEvents TabPage_Log As TabPage
     Friend WithEvents RichTextBox_Log As RichTextBox
-    Friend WithEvents NotifyIcon1 As NotifyIcon
-    Friend WithEvents Timer1 As Timer
+    Friend WithEvents NotifyIcon_ As NotifyIcon
+    Friend WithEvents Timer_ As Timer
     Friend WithEvents TabPage_Options As TabPage
     Friend WithEvents TextBox_ConLost As TextBox
     Friend WithEvents TextBox_ConBack As TextBox
@@ -293,4 +317,6 @@ Partial Class Form_Main
     Friend WithEvents ColumnHeader3 As ColumnHeader
     Friend WithEvents CheckBox_Notify As CheckBox
     Friend WithEvents CheckBox_LogSave As CheckBox
+    Friend WithEvents Button_Debug As Button
+    Friend WithEvents CheckBox_Autostart As CheckBox
 End Class

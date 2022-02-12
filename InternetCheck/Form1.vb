@@ -6,6 +6,7 @@ Public Class Form_Main
     Dim TempAbbruch As Abbruch = Nothing
     Dim ListOfAbbruch As New List(Of Abbruch)
     Dim Abbruchtest As Boolean = False
+    Public Shared Wave1 As New NAudio.Wave.WaveOut
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button_CheckButton.Click
         Select Case Button_CheckButton.Text
             Case "Start checking"
@@ -20,34 +21,39 @@ Public Class Form_Main
     End Sub
 
     Private Sub DeReActivatedChecking(state As Boolean)
-        Timer1.Enabled = state
+        Timer_.Enabled = state
         Button_CheckButton.Text = If(state, "Stop checking", "Start checking")
     End Sub
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        If Not Abbruchtest Then CheckConnection()
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer_.Tick
+        CheckConnection()
     End Sub
 
     Private Sub CheckConnection()
-        If Not SingleCheck("google.com") Then
-            If Not SingleCheck("microsoft.com") Then
-                AddToLog("Issues connecting to the internet.")
-                If Not SingleCheck("gmx.com") Then
-                    If Not SingleCheck("bing.com") Then
-                        Connection_Lost()
+        If Abbruchtest Then
+            Threading.Thread.Sleep(1000)
+            Connection_Lost()
+        Else
+            If Not SingleCheck("google.com") Then
+                If Not SingleCheck("microsoft.com") Then
+                    AddToLog("Issues connecting to the internet.")
+                    If Not SingleCheck("gmx.com") Then
+                        If Not SingleCheck("bing.com") Then
+                            Connection_Lost()
+                        Else
+                            Connection_Existent()
+                            AddToLog("Issues resolved.")
+                        End If
                     Else
                         Connection_Existent()
                         AddToLog("Issues resolved.")
                     End If
                 Else
                     Connection_Existent()
-                    AddToLog("Issues resolved.")
                 End If
             Else
                 Connection_Existent()
             End If
-        Else
-            Connection_Existent()
         End If
     End Sub
 
@@ -56,6 +62,66 @@ Public Class Form_Main
             Lost_Connection = True
             TempAbbruch = New Abbruch(DateTime.Now)
             AddToLog("Internet connection has been lost.")
+            If CheckBox_ConLost.Checked Then PlaySound(True)
+            If CheckBox_Notify.Checked Then ShowBalloonTip("Internet connection lost", "Internet connection has been lost.")
+        End If
+    End Sub
+
+    Private Sub ShowBalloonTip(Optional Title As String = "", Optional Text As String = "")
+        NotifyIcon_.BalloonTipTitle = Title
+        NotifyIcon_.BalloonTipText = Text
+        NotifyIcon_.ShowBalloonTip(8000)
+    End Sub
+
+    Private Sub PlayStandard(Lost As Boolean)
+        Try
+            If Lost Then
+                Wave1.Stop()
+                Dim file As String = Application.StartupPath & "\Audio\Con_Lost1.mp3"
+                Dim data As New NAudio.Wave.Mp3FileReader(file)
+                Wave1.Init(data)
+                Wave1.Play()
+            Else
+                Wave1.Stop()
+                Dim file As String = Application.StartupPath & "\Audio\Con_Back1.mp3"
+                Dim data As New NAudio.Wave.Mp3FileReader(file)
+                Wave1.Init(data)
+                Wave1.Play()
+            End If
+        Catch ex As Exception
+            MessageBox.Show($"Standard Audiofile could not be played.{vbCrLf}The following error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End Try
+    End Sub
+
+    Private Sub PlaySound(Lost As Boolean)
+        If Lost Then
+            If Not TextBox_ConLost.Text = "" AndAlso Not IsNothing(TextBox_ConLost.Text) Then
+                Try
+                    Wave1.Stop()
+                    Dim file As String = TextBox_ConLost.Text
+                    Dim data As New NAudio.Wave.Mp3FileReader(file)
+                    Wave1.Init(data)
+                    Wave1.Play()
+                Catch ex As Exception
+                    PlayStandard(Lost)
+                End Try
+            Else
+                PlayStandard(Lost)
+            End If
+        Else
+            If Not TextBox_ConBack.Text = "" AndAlso Not IsNothing(TextBox_ConBack.Text) Then
+                Try
+                    Wave1.Stop()
+                    Dim file As String = TextBox_ConBack.Text
+                    Dim data As New NAudio.Wave.Mp3FileReader(file)
+                    Wave1.Init(data)
+                    Wave1.Play()
+                Catch ex As Exception
+                    PlayStandard(Lost)
+                End Try
+            Else
+                PlayStandard(Lost)
+            End If
         End If
     End Sub
 
@@ -71,8 +137,35 @@ Public Class Form_Main
             If TempAbbruch.Dauer.TotalMinutes > 2 Then ListOfAbbruch.Add(TempAbbruch.Clone())
             TempAbbruch = Nothing
             AddToLog("Internet connection has been reestablished.")
+            If CheckBox_ConBack.Checked Then PlaySound(False)
+            If CheckBox_Notify.Checked Then ShowBalloonTip("Internet connection reestablished", "Internet connection has been reestablished.")
         End If
     End Sub
+
+    Private Sub Update_Listview()
+        ListView_Losses.Items.Clear()
+        For Each Itum In ListOfAbbruch
+            With ListView_Losses.Items.Add($"{Itum.Anfang:yyyy-MM-dd}, {Itum.Anfang:HH:mm:ss}")
+                .SubItems.Add($"{Itum.Ende:yyyy-MM-dd}, {Itum.Ende:HH:mm:ss}")
+                .SubItems.Add($"{Duration_Stringbuilder(Itum.Dauer)}")
+            End With
+        Next
+    End Sub
+
+    Private Function Duration_Stringbuilder(Dauer As TimeSpan)
+        Dim Output As String = ""
+        If Dauer.Days > 0 Then
+            Output &= String.Format("{0:%d} days, {0:%h} hours, {0:%m} minutes", Dauer)
+        ElseIf Dauer.Hours > 0 Then
+            Output &= String.Format("{0:%h} hours, {0:%m} minutes", Dauer)
+        Else
+            Output &= String.Format("{0:%m} minutes", Dauer)
+        End If
+        If Dauer.Seconds > 0 Then
+            Output &= String.Format(", {0:%s} seconds", Dauer)
+        End If
+        Return Output
+    End Function
 
     Private Function SingleCheck(host As String)
         Try
@@ -96,7 +189,7 @@ Public Class Form_Main
         Catch ex As Exception
             AddToLog("Options could not be loaded.")
             If IO.File.Exists(Application.StartupPath & "\options.ini") Then
-                MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", MsgBoxStyle.OkOnly & MsgBoxStyle.Information)
+                MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Else IO.File.Create(Application.StartupPath & "\options.ini") : AddToLog("Options file did not exist and was created.")
             End If
         End Try
@@ -107,15 +200,18 @@ Public Class Form_Main
         Catch ex As Exception
             AddToLog("Connectionlog could not be loaded.")
             If IO.File.Exists(Application.StartupPath & "\connectionlog.bin") Then
-                MessageBox.Show("Connectionlog file could not be read properly. Some saved options might not have been applied.", MsgBoxStyle.OkOnly & MsgBoxStyle.Information)
+                MessageBox.Show("Connectionlog file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Else IO.File.Create(Application.StartupPath & "\connectionlog.bin") : AddToLog("Connectionlog file did not exist and was created.")
             End If
         End Try
 
+        Update_Listview()
+        If CheckBox_Autostart.Checked Then Button1_Click(Nothing, Nothing)
     End Sub
 
     Private Sub Form_Main_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         AddToLog("Application stopping..")
+        Wave1.Dispose()
 
         Try
             Save_ini()
@@ -154,6 +250,7 @@ Public Class Form_Main
         iniString &= $"Notify if connection status changes:{CheckBox_Notify.Checked}{vbCrLf}"
         iniString &= $"Save log files:{CheckBox_LogSave.Checked}{vbCrLf}"
         iniString &= $"Start on Windows startup:{CheckBox_WinStart.Checked}{vbCrLf}"
+        iniString &= $"Start checking on program startup:{CheckBox_Autostart.Checked}{vbCrLf}"
         iniString &= $"Windowsize:{Size.Width},{Size.Height}{vbCrLf}"
         iniString &= $"Windowposition:{Location.X},{Location.Y}{vbCrLf}"
 
@@ -179,6 +276,7 @@ Public Class Form_Main
                 If Line.StartsWith("Notify if connection status changes:") Then CheckBox_Notify.Checked = Line.Substring(36, Line.Length - (36)) : Continue For
                 If Line.StartsWith("Save log files:") Then CheckBox_LogSave.Checked = Line.Substring(15, Line.Length - (15)) : Continue For
                 If Line.StartsWith("Start on Windows startup:") Then CheckBox_WinStart.Checked = Line.Substring(25, Line.Length - (25)) : Continue For
+                If Line.StartsWith("Start checking on program startup:") Then CheckBox_Autostart.Checked = Line.Substring(34, Line.Length - (34)) : Continue For
                 If Line.StartsWith("Windowsize:") Then Size = New Size(Line.Substring(11, Line.IndexOf(",") - (11)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
                 If Line.StartsWith("Windowposition:") Then Location = New Point(Line.Substring(15, Line.IndexOf(",") - (15)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
                 'EmptyLineCounter += 1
@@ -186,7 +284,7 @@ Public Class Form_Main
                 EmptyLineCounter += 1
             End If
         Next
-        If (iniLines.Length - EmptyLineCounter) < 9 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", MsgBoxStyle.OkOnly & MsgBoxStyle.Information)
+        If (iniLines.Length - EmptyLineCounter) < 10 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub Save_Abbrüche()
@@ -204,5 +302,15 @@ Public Class Form_Main
             If Not Line = "" AndAlso Not IsNothing(Line) AndAlso Line.Contains(";") Then _
                 ListOfAbbruch.Add(New Abbruch(New DateTime(Convert.ToInt64(Line.Substring(0, Line.IndexOf(";")))), New TimeSpan(Convert.ToInt64(Line.Substring(Line.IndexOf(";") + 1, Line.Length - (Line.IndexOf(";") + 1))))))
         Next
+    End Sub
+
+    Private Sub Button_Debug_Click(sender As Object, e As EventArgs) Handles Button_Debug.Click
+        If Abbruchtest Then
+            Button_Debug.Text = "Lose Connection [DEBUG]"
+            Abbruchtest = False
+        Else
+            Button_Debug.Text = "Reestablish Connection [DEBUG]"
+            Abbruchtest = True
+        End If
     End Sub
 End Class
