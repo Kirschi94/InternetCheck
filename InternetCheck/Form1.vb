@@ -289,9 +289,11 @@ Public Class Form_Main
 
     Private Sub Save_Abbrüche()
         Dim AbbrString As String = ""
-        For Each Artikel In ListOfAbbruch
-            AbbrString &= $"{Artikel.Anfang.Ticks};{Artikel.Dauer.Ticks}{vbCrLf}"
-        Next
+        If Not ListOfAbbruch.Count = 0 Then
+            For Each Artikel In ListOfAbbruch
+                AbbrString &= $"{Artikel.Anfang.Ticks};{Artikel.Dauer.Ticks}{vbCrLf}"
+            Next
+        End If
         IO.File.WriteAllText(Application.StartupPath & "\connectionlog.bin", AbbrString)
     End Sub
 
