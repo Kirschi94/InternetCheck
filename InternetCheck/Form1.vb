@@ -292,6 +292,7 @@ Public Class Form_Main
                     StartMinTSMI.Checked = CheckBox_StartMin.Checked : Continue For
                 If Line.StartsWith("Windowsize:") Then Size = New Size(Line.Substring(11, Line.IndexOf(",") - (11)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
                 If Line.StartsWith("Windowposition:") Then Location = New Point(Line.Substring(15, Line.IndexOf(",") - (15)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
+                If Location.X < 0 OrElse Location.Y < 0 Then Location = New Point(0, 0)
                 'EmptyLineCounter += 1
             Else
                 EmptyLineCounter += 1
