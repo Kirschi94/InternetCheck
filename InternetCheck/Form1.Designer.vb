@@ -46,7 +46,6 @@ Partial Class Form_Main
         Me.TabPage_Log = New System.Windows.Forms.TabPage()
         Me.RichTextBox_Log = New System.Windows.Forms.RichTextBox()
         Me.TheNotifyIcon = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.TheTimer = New System.Windows.Forms.Timer(Me.components)
         Me.ContextMenuStrip_NotIcon = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -58,6 +57,7 @@ Partial Class Form_Main
         Me.StartMinTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.WinStartTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TheTimer = New System.Windows.Forms.Timer(Me.components)
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
         Me.TabPage_Options.SuspendLayout()
@@ -301,10 +301,6 @@ Partial Class Form_Main
         Me.TheNotifyIcon.Text = "InternetCheck"
         Me.TheNotifyIcon.Visible = True
         '
-        'TheTimer
-        '
-        Me.TheTimer.Interval = 12000
-        '
         'ContextMenuStrip_NotIcon
         '
         Me.ContextMenuStrip_NotIcon.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ExitToolStripMenuItem})
@@ -373,6 +369,10 @@ Partial Class Form_Main
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
         Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
+        '
+        'TheTimer
+        '
+        Me.TheTimer.Interval = 12000
         '
         'Form_Main
         '

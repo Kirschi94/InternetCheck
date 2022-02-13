@@ -15,6 +15,7 @@ Public Class Form_Main
                 DeReActivatedChecking(True)
                 AddToLog("Started monitoring the internet connection.")
             Case "Stop checking"
+                TheNotifyIcon.Icon = My.Resources.I_4b
                 DeReActivatedChecking(False)
                 AddToLog("Stopped monitoring the internet connection.")
             Case Else
@@ -37,6 +38,7 @@ Public Class Form_Main
             Connection_Lost()
         Else
             If Not SingleCheck("google.com") Then
+                TheNotifyIcon.Icon = My.Resources.I_4_g
                 If Not SingleCheck("microsoft.com") Then
                     AddToLog("Issues connecting to the internet.")
                     If Not SingleCheck("gmx.com") Then
@@ -60,6 +62,7 @@ Public Class Form_Main
     End Sub
 
     Private Sub Connection_Lost()
+        TheNotifyIcon.Icon = My.Resources.I_4_r
         If Not Lost_Connection Then
             Lost_Connection = True
             TempAbbruch = New Abbruch(DateTime.Now)
@@ -133,6 +136,7 @@ Public Class Form_Main
     End Sub
 
     Private Sub Connection_Existent()
+        TheNotifyIcon.Icon = My.Resources.I_4_gr
         If Lost_Connection AndAlso Not IsNothing(TempAbbruch) Then
             TempAbbruch.Set_End(DateTime.Now)
             Lost_Connection = False
