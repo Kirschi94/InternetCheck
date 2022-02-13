@@ -6,7 +6,7 @@
     <RootNamespace>InternetCheck</RootNamespace>
     <StartupObject>InternetCheck.Form_Main</StartupObject>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>AK-Logo-2020-Hell_kein_Schatten.ico</ApplicationIcon>
+    <ApplicationIcon>I_4a.ico</ApplicationIcon>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
     <Version>0.9.2</Version>
   </PropertyGroup>
