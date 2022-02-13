@@ -47,10 +47,22 @@ Partial Class Form_Main
         Me.RichTextBox_Log = New System.Windows.Forms.RichTextBox()
         Me.TheNotifyIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.TheTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.ContextMenuStrip_NotIcon = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ConLostTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ConBackTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NotifyTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LogSaveTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AutostartTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.StartMinTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.WinStartTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
         Me.TabPage_Options.SuspendLayout()
         Me.TabPage_Log.SuspendLayout()
+        Me.ContextMenuStrip_NotIcon.SuspendLayout()
         Me.SuspendLayout()
         '
         'ListView_Losses
@@ -163,6 +175,7 @@ Partial Class Form_Main
         'CheckBox_StartMin
         '
         Me.CheckBox_StartMin.AutoSize = True
+        Me.CheckBox_StartMin.Enabled = False
         Me.CheckBox_StartMin.Location = New System.Drawing.Point(8, 162)
         Me.CheckBox_StartMin.Name = "CheckBox_StartMin"
         Me.CheckBox_StartMin.Size = New System.Drawing.Size(109, 19)
@@ -283,6 +296,7 @@ Partial Class Form_Main
         '
         'TheNotifyIcon
         '
+        Me.TheNotifyIcon.ContextMenuStrip = Me.ContextMenuStrip_NotIcon
         Me.TheNotifyIcon.Icon = CType(resources.GetObject("TheNotifyIcon.Icon"), System.Drawing.Icon)
         Me.TheNotifyIcon.Text = "InternetCheck"
         Me.TheNotifyIcon.Visible = True
@@ -290,6 +304,75 @@ Partial Class Form_Main
         'TheTimer
         '
         Me.TheTimer.Interval = 12000
+        '
+        'ContextMenuStrip_NotIcon
+        '
+        Me.ContextMenuStrip_NotIcon.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.ContextMenuStrip_NotIcon.Name = "ContextMenuStrip_NotIcon"
+        Me.ContextMenuStrip_NotIcon.Size = New System.Drawing.Size(117, 70)
+        '
+        'ShowToolStripMenuItem
+        '
+        Me.ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
+        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.ShowToolStripMenuItem.Text = "Show"
+        '
+        'OptionsToolStripMenuItem
+        '
+        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConLostTSMI, Me.ConBackTSMI, Me.NotifyTSMI, Me.LogSaveTSMI, Me.AutostartTSMI, Me.StartMinTSMI, Me.WinStartTSMI})
+        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.OptionsToolStripMenuItem.Text = "Options"
+        '
+        'ConLostTSMI
+        '
+        Me.ConLostTSMI.Name = "ConLostTSMI"
+        Me.ConLostTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.ConLostTSMI.Text = "Connection lost sound"
+        '
+        'ConBackTSMI
+        '
+        Me.ConBackTSMI.Name = "ConBackTSMI"
+        Me.ConBackTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.ConBackTSMI.Text = "Connection reestablished sound"
+        '
+        'NotifyTSMI
+        '
+        Me.NotifyTSMI.Name = "NotifyTSMI"
+        Me.NotifyTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.NotifyTSMI.Text = "Show notification if connection status changes"
+        '
+        'LogSaveTSMI
+        '
+        Me.LogSaveTSMI.Name = "LogSaveTSMI"
+        Me.LogSaveTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.LogSaveTSMI.Text = "Save log files"
+        '
+        'AutostartTSMI
+        '
+        Me.AutostartTSMI.Name = "AutostartTSMI"
+        Me.AutostartTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.AutostartTSMI.Text = "Automatically start check connection status on launch"
+        '
+        'StartMinTSMI
+        '
+        Me.StartMinTSMI.Enabled = False
+        Me.StartMinTSMI.Name = "StartMinTSMI"
+        Me.StartMinTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.StartMinTSMI.Text = "Start minimized"
+        '
+        'WinStartTSMI
+        '
+        Me.WinStartTSMI.Enabled = False
+        Me.WinStartTSMI.Name = "WinStartTSMI"
+        Me.WinStartTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.WinStartTSMI.Text = "Start on Windows startup"
+        '
+        'ExitToolStripMenuItem
+        '
+        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'Form_Main
         '
@@ -308,6 +391,7 @@ Partial Class Form_Main
         Me.TabPage_Options.ResumeLayout(False)
         Me.TabPage_Options.PerformLayout()
         Me.TabPage_Log.ResumeLayout(False)
+        Me.ContextMenuStrip_NotIcon.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -335,4 +419,15 @@ Partial Class Form_Main
     Friend WithEvents Button_Debug As Button
     Friend WithEvents CheckBox_Autostart As CheckBox
     Friend WithEvents CheckBox_StartMin As CheckBox
+    Friend WithEvents ContextMenuStrip_NotIcon As ContextMenuStrip
+    Friend WithEvents ShowToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ConLostTSMI As ToolStripMenuItem
+    Friend WithEvents ConBackTSMI As ToolStripMenuItem
+    Friend WithEvents NotifyTSMI As ToolStripMenuItem
+    Friend WithEvents LogSaveTSMI As ToolStripMenuItem
+    Friend WithEvents AutostartTSMI As ToolStripMenuItem
+    Friend WithEvents StartMinTSMI As ToolStripMenuItem
+    Friend WithEvents WinStartTSMI As ToolStripMenuItem
+    Friend WithEvents ExitToolStripMenuItem As ToolStripMenuItem
 End Class

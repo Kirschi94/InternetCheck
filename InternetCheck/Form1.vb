@@ -6,6 +6,8 @@ Public Class Form_Main
     Dim TempAbbruch As Abbruch = Nothing
     Dim ListOfAbbruch As New List(Of Abbruch)
     Dim Abbruchtest As Boolean = False
+    Dim Starting As Boolean = True
+    Dim NonUserAction As Boolean = False
     Public Shared Wave1 As New NAudio.Wave.WaveOut
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button_CheckButton.Click
         Select Case Button_CheckButton.Text
@@ -206,7 +208,9 @@ Public Class Form_Main
         End Try
 
         Update_Listview()
+        If CheckBox_StartMin.Checked Then WindowState = FormWindowState.Minimized : Visible = False
         If CheckBox_Autostart.Checked Then Button1_Click(Nothing, Nothing)
+        Starting = False
     End Sub
 
     Private Sub Form_Main_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -251,6 +255,7 @@ Public Class Form_Main
         iniString &= $"Save log files:{CheckBox_LogSave.Checked}{vbCrLf}"
         iniString &= $"Start on Windows startup:{CheckBox_WinStart.Checked}{vbCrLf}"
         iniString &= $"Start checking on program startup:{CheckBox_Autostart.Checked}{vbCrLf}"
+        iniString &= $"Start minimized:{CheckBox_StartMin.Checked}{vbCrLf}"
         iniString &= $"Windowsize:{Size.Width},{Size.Height}{vbCrLf}"
         iniString &= $"Windowposition:{Location.X},{Location.Y}{vbCrLf}"
 
@@ -271,12 +276,20 @@ Public Class Form_Main
             If Not Line.Length = 0 AndAlso Not Line = "" AndAlso Not IsNothing(Line) Then
                 If Line.StartsWith("Connection lost Sound:") Then TextBox_ConLost.Text = Line.Substring(23, Line.Length - (23 + 1)) : Continue For
                 If Line.StartsWith("Connection reestablished Sound:") Then TextBox_ConBack.Text = Line.Substring(32, Line.Length - (32 + 1)) : Continue For
-                If Line.StartsWith("Play connection lost Sound:") Then CheckBox_ConLost.Checked = Line.Substring(27, Line.Length - (27)) : Continue For
-                If Line.StartsWith("Play connection reestablished Sound:") Then CheckBox_ConBack.Checked = Line.Substring(36, Line.Length - (36)) : Continue For
-                If Line.StartsWith("Notify if connection status changes:") Then CheckBox_Notify.Checked = Line.Substring(36, Line.Length - (36)) : Continue For
-                If Line.StartsWith("Save log files:") Then CheckBox_LogSave.Checked = Line.Substring(15, Line.Length - (15)) : Continue For
-                If Line.StartsWith("Start on Windows startup:") Then CheckBox_WinStart.Checked = Line.Substring(25, Line.Length - (25)) : Continue For
-                If Line.StartsWith("Start checking on program startup:") Then CheckBox_Autostart.Checked = Line.Substring(34, Line.Length - (34)) : Continue For
+                If Line.StartsWith("Play connection lost Sound:") Then CheckBox_ConLost.Checked = Line.Substring(27, Line.Length - (27)) : _
+                    ConLostTSMI.Checked = CheckBox_ConLost.Checked : Continue For
+                If Line.StartsWith("Play connection reestablished Sound:") Then CheckBox_ConBack.Checked = Line.Substring(36, Line.Length - (36)) : _
+                    ConBackTSMI.Checked = CheckBox_ConBack.Checked : Continue For
+                If Line.StartsWith("Notify if connection status changes:") Then CheckBox_Notify.Checked = Line.Substring(36, Line.Length - (36)) : _
+                    NotifyTSMI.Checked = CheckBox_Notify.Checked : Continue For
+                If Line.StartsWith("Save log files:") Then CheckBox_LogSave.Checked = Line.Substring(15, Line.Length - (15)) : _
+                    LogSaveTSMI.Checked = CheckBox_LogSave.Checked : Continue For
+                If Line.StartsWith("Start on Windows startup:") Then CheckBox_WinStart.Checked = Line.Substring(25, Line.Length - (25)) : _
+                    WinStartTSMI.Checked = CheckBox_WinStart.Checked : Continue For
+                If Line.StartsWith("Start checking on program startup:") Then CheckBox_Autostart.Checked = Line.Substring(34, Line.Length - (34)) : _
+                    AutostartTSMI.Checked = CheckBox_Autostart.Checked : Continue For
+                If Line.StartsWith("Start minimized:") Then CheckBox_StartMin.Checked = Line.Substring(16, Line.Length - (16)) : _
+                    StartMinTSMI.Checked = CheckBox_StartMin.Checked : Continue For
                 If Line.StartsWith("Windowsize:") Then Size = New Size(Line.Substring(11, Line.IndexOf(",") - (11)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
                 If Line.StartsWith("Windowposition:") Then Location = New Point(Line.Substring(15, Line.IndexOf(",") - (15)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
                 'EmptyLineCounter += 1
@@ -284,7 +297,7 @@ Public Class Form_Main
                 EmptyLineCounter += 1
             End If
         Next
-        If (iniLines.Length - EmptyLineCounter) < 10 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        If (iniLines.Length - EmptyLineCounter) < 11 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub Save_Abbrüche()
@@ -327,4 +340,128 @@ Public Class Form_Main
         Show()
         WindowState = FormWindowState.Normal
     End Sub
+
+    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+        Close()
+    End Sub
+
+    Private Sub ShowToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShowToolStripMenuItem.Click
+        Show()
+        WindowState = FormWindowState.Normal
+    End Sub
+
+#Region "CheckedChanged handeling"
+    Private Sub CheckedChanged(TheCheckbox As CheckBox, TSMI As ToolStripMenuItem, Optional FromCheckbox As Boolean = False)
+        If Not Starting Then
+            If FromCheckbox Then
+                NonUserAction = True
+                If TSMI.Checked Then
+                    TheCheckbox.Checked = False
+                    TSMI.Checked = False
+                Else
+                    TheCheckbox.Checked = True
+                    TSMI.Checked = True
+                End If
+            Else
+                NonUserAction = True
+                If TheCheckbox.Checked Then
+                    TheCheckbox.Checked = False
+                    TSMI.Checked = False
+                Else
+                    TheCheckbox.Checked = True
+                    TSMI.Checked = True
+                End If
+            End If
+        End If
+    End Sub
+    Private Sub ConLostTSMI_Click(sender As Object, e As EventArgs) Handles ConLostTSMI.Click
+        CheckedChanged(CheckBox_ConLost, ConLostTSMI)
+    End Sub
+
+    Private Sub ConBackTSMI_Click(sender As Object, e As EventArgs) Handles ConBackTSMI.Click
+        CheckedChanged(CheckBox_ConBack, ConBackTSMI)
+    End Sub
+
+    Private Sub NotifyTSMI_Click(sender As Object, e As EventArgs) Handles NotifyTSMI.Click
+        CheckedChanged(CheckBox_Notify, NotifyTSMI)
+    End Sub
+
+    Private Sub LogSaveTSMI_Click(sender As Object, e As EventArgs) Handles LogSaveTSMI.Click
+        CheckedChanged(CheckBox_LogSave, LogSaveTSMI)
+    End Sub
+
+    Private Sub AutostartTSMI_Click(sender As Object, e As EventArgs) Handles AutostartTSMI.Click
+        CheckedChanged(CheckBox_Autostart, AutostartTSMI)
+    End Sub
+
+    Private Sub StartMinTSMI_Click(sender As Object, e As EventArgs) Handles StartMinTSMI.Click
+        CheckedChanged(CheckBox_StartMin, StartMinTSMI)
+    End Sub
+
+    Private Sub WinStartTSMI_Click(sender As Object, e As EventArgs) Handles WinStartTSMI.Click
+        CheckedChanged(CheckBox_WinStart, WinStartTSMI)
+    End Sub
+
+    Private Sub CheckBox_Autostart_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_Autostart.CheckedChanged
+        If NonUserAction Then
+            NonUserAction = False
+        Else
+            CheckedChanged(CheckBox_Autostart, AutostartTSMI, True)
+        End If
+    End Sub
+
+    Private Sub CheckBox_ConBack_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_ConBack.CheckedChanged
+        If NonUserAction Then
+            NonUserAction = False
+        Else
+            CheckedChanged(CheckBox_ConBack, ConBackTSMI, True)
+            NonUserAction = False
+        End If
+    End Sub
+
+    Private Sub CheckBox_ConLost_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_ConLost.CheckedChanged
+        If NonUserAction Then
+            NonUserAction = False
+        Else
+            CheckedChanged(CheckBox_ConLost, ConLostTSMI, True)
+            NonUserAction = False
+        End If
+    End Sub
+
+    Private Sub CheckBox_LogSave_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_LogSave.CheckedChanged
+        If NonUserAction Then
+            NonUserAction = False
+        Else
+            CheckedChanged(CheckBox_LogSave, LogSaveTSMI, True)
+            NonUserAction = False
+        End If
+    End Sub
+
+    Private Sub CheckBox_Notify_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_Notify.CheckedChanged
+        If NonUserAction Then
+            NonUserAction = False
+        Else
+            CheckedChanged(CheckBox_Notify, NotifyTSMI, True)
+            NonUserAction = False
+        End If
+    End Sub
+
+    Private Sub CheckBox_StartMin_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_StartMin.CheckedChanged
+        If NonUserAction Then
+            NonUserAction = False
+        Else
+            CheckedChanged(CheckBox_StartMin, StartMinTSMI, True)
+            NonUserAction = False
+        End If
+    End Sub
+
+    Private Sub CheckBox_WinStart_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_WinStart.CheckedChanged
+        If NonUserAction Then
+            NonUserAction = False
+        Else
+            CheckedChanged(CheckBox_WinStart, WinStartTSMI, True)
+            NonUserAction = False
+        End If
+    End Sub
+#End Region
 End Class
