@@ -40,20 +40,20 @@ Public Class Form_Main
             If Not SingleCheck("google.com") Then
                 TheNotifyIcon.Icon = My.Resources.I_4_g
                 If Not SingleCheck("microsoft.com") Then
-                    AddToLog("Issues connecting to the internet.")
+                    If Not Lost_Connection Then AddToLog("Issues connecting to the internet.")
                     If Not SingleCheck("gmx.com") Then
-                        If Not SingleCheck("bing.com") Then
-                            Connection_Lost()
+                            If Not SingleCheck("bing.com") Then
+                                Connection_Lost()
+                            Else
+                                Connection_Existent()
+                                AddToLog("Issues resolved.")
+                            End If
                         Else
                             Connection_Existent()
                             AddToLog("Issues resolved.")
                         End If
                     Else
                         Connection_Existent()
-                        AddToLog("Issues resolved.")
-                    End If
-                Else
-                    Connection_Existent()
                 End If
             Else
                 Connection_Existent()
