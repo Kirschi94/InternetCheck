@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Net.NetworkInformation
+Imports System.Text.RegularExpressions
 
 Public Class Form_Main
     Dim Lost_Connection As Boolean = False
@@ -8,6 +9,7 @@ Public Class Form_Main
     Dim Abbruchtest As Boolean = False
     Dim Starting As Boolean = True
     Dim NonUserAction As Boolean = False
+    Dim LastText As String = ""
     Public Shared Wave1 As New NAudio.Wave.WaveOut
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button_CheckButton.Click
         Select Case Button_CheckButton.Text
@@ -42,18 +44,18 @@ Public Class Form_Main
                 If Not SingleCheck("microsoft.com") Then
                     If Not Lost_Connection Then AddToLog("Issues connecting to the internet.")
                     If Not SingleCheck("gmx.com") Then
-                            If Not SingleCheck("bing.com") Then
-                                Connection_Lost()
-                            Else
-                                Connection_Existent()
-                                AddToLog("Issues resolved.")
-                            End If
+                        If Not SingleCheck("bing.com") Then
+                            Connection_Lost()
                         Else
                             Connection_Existent()
                             AddToLog("Issues resolved.")
                         End If
                     Else
                         Connection_Existent()
+                        AddToLog("Issues resolved.")
+                    End If
+                Else
+                    Connection_Existent()
                 End If
             Else
                 Connection_Existent()
@@ -140,7 +142,11 @@ Public Class Form_Main
         If Lost_Connection AndAlso Not IsNothing(TempAbbruch) Then
             TempAbbruch.Set_End(DateTime.Now)
             Lost_Connection = False
-            If TempAbbruch.Dauer.TotalMinutes > 2 Then ListOfAbbruch.Add(TempAbbruch.Clone())
+            Try
+                If TempAbbruch.Dauer.TotalMinutes > Convert.ToInt32(TextBox_Duration.Text) Then ListOfAbbruch.Add(TempAbbruch.Clone())
+            Catch
+                ListOfAbbruch.Add(TempAbbruch.Clone())
+            End Try
             TempAbbruch = Nothing
             AddToLog("Internet connection has been reestablished.")
             If CheckBox_ConBack.Checked Then PlaySound(False)
@@ -266,6 +272,7 @@ Public Class Form_Main
         iniString &= $"Start on Windows startup:{CheckBox_WinStart.Checked}{vbCrLf}"
         iniString &= $"Start checking on program startup:{CheckBox_Autostart.Checked}{vbCrLf}"
         iniString &= $"Start minimized:{CheckBox_StartMin.Checked}{vbCrLf}"
+        iniString &= $"Connectionlog min-duration:""{TextBox_Duration.Text}""{vbCrLf}"
         iniString &= $"Windowsize:{Size.Width},{Size.Height}{vbCrLf}"
         iniString &= $"Windowposition:{Location.X},{Location.Y}{vbCrLf}"
 
@@ -300,6 +307,7 @@ Public Class Form_Main
                     AutostartTSMI.Checked = CheckBox_Autostart.Checked : Continue For
                 If Line.StartsWith("Start minimized:") Then CheckBox_StartMin.Checked = Line.Substring(16, Line.Length - (16)) : _
                     StartMinTSMI.Checked = CheckBox_StartMin.Checked : Continue For
+                If Line.StartsWith("Connectionlog min-duration:") Then TextBox_Duration.Text = Line.Substring(28, Line.Length - (28 + 1)) : Continue For
                 If Line.StartsWith("Windowsize:") Then Size = New Size(Line.Substring(11, Line.IndexOf(",") - (11)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
                 If Line.StartsWith("Windowposition:") Then Location = New Point(Line.Substring(15, Line.IndexOf(",") - (15)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
                 If Convert.ToInt32(Line.Substring(15, Line.IndexOf(",") - (15))) < 0 OrElse Convert.ToInt32(Line.Substring(Line.IndexOf(",") + 1)) < 0 Then Location = New Point(0, 0)
@@ -473,6 +481,21 @@ Public Class Form_Main
             CheckedChanged(CheckBox_WinStart, WinStartTSMI, True)
             NonUserAction = False
         End If
+    End Sub
+
+    Private Sub TextBox_Duration_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox_Duration.KeyPress
+        Try
+            Dim p = 2 + TextBox_Duration.Text
+            LastText = TextBox_Duration.Text
+        Catch
+            TextBox_Duration.Text = LastText
+            Try
+                Dim p = 2 + TextBox_Duration.Text
+                LastText = TextBox_Duration.Text
+            Catch
+                TextBox_Duration.Text = 2
+            End Try
+        End Try
     End Sub
 #End Region
 End Class

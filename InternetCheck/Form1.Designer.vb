@@ -58,6 +58,9 @@ Partial Class Form_Main
         Me.WinStartTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TheTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.Label_Dur1 = New System.Windows.Forms.Label()
+        Me.Label_Dur2 = New System.Windows.Forms.Label()
+        Me.TextBox_Duration = New System.Windows.Forms.TextBox()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
         Me.TabPage_Options.SuspendLayout()
@@ -155,6 +158,9 @@ Partial Class Form_Main
         '
         'TabPage_Options
         '
+        Me.TabPage_Options.Controls.Add(Me.TextBox_Duration)
+        Me.TabPage_Options.Controls.Add(Me.Label_Dur2)
+        Me.TabPage_Options.Controls.Add(Me.Label_Dur1)
         Me.TabPage_Options.Controls.Add(Me.CheckBox_StartMin)
         Me.TabPage_Options.Controls.Add(Me.CheckBox_Autostart)
         Me.TabPage_Options.Controls.Add(Me.CheckBox_LogSave)
@@ -374,6 +380,33 @@ Partial Class Form_Main
         '
         Me.TheTimer.Interval = 12000
         '
+        'Label_Dur1
+        '
+        Me.Label_Dur1.AutoSize = True
+        Me.Label_Dur1.Location = New System.Drawing.Point(5, 190)
+        Me.Label_Dur1.Name = "Label_Dur1"
+        Me.Label_Dur1.Size = New System.Drawing.Size(278, 15)
+        Me.Label_Dur1.TabIndex = 9
+        Me.Label_Dur1.Text = "Do not log connection issues with a duration below"
+        '
+        'Label_Dur2
+        '
+        Me.Label_Dur2.AutoSize = True
+        Me.Label_Dur2.Location = New System.Drawing.Point(337, 190)
+        Me.Label_Dur2.Name = "Label_Dur2"
+        Me.Label_Dur2.Size = New System.Drawing.Size(53, 15)
+        Me.Label_Dur2.TabIndex = 10
+        Me.Label_Dur2.Text = "minutes."
+        '
+        'TextBox_Duration
+        '
+        Me.TextBox_Duration.Location = New System.Drawing.Point(289, 187)
+        Me.TextBox_Duration.Name = "TextBox_Duration"
+        Me.TextBox_Duration.Size = New System.Drawing.Size(42, 23)
+        Me.TextBox_Duration.TabIndex = 11
+        Me.TextBox_Duration.Text = "2"
+        Me.TextBox_Duration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
         'Form_Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -430,4 +463,7 @@ Partial Class Form_Main
     Friend WithEvents StartMinTSMI As ToolStripMenuItem
     Friend WithEvents WinStartTSMI As ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TextBox_Duration As TextBox
+    Friend WithEvents Label_Dur2 As Label
+    Friend WithEvents Label_Dur1 As Label
 End Class
