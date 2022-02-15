@@ -374,15 +374,23 @@ Public Class Form_Main
         If Not TheBackgroundWorker.IsBusy Then TheBackgroundWorker.RunWorkerAsync()
     End Sub
 
-    Private Sub TextBox_Duration_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox_Duration.KeyPress
+    Private Sub TextBox_Duration_TextChanged(sender As Object, e As EventArgs) Handles TextBox_Duration.TextChanged
         Try
-            Dim p = 2 + TextBox_Duration.Text
-            LastText = TextBox_Duration.Text
+            If IsNumeric(TextBox_Duration.Text) Then
+                Dim p = 2 + TextBox_Duration.Text
+                LastText = TextBox_Duration.Text
+            Else
+                TextBox_Duration.Text = LastText
+            End If
         Catch
             TextBox_Duration.Text = LastText
             Try
-                Dim p = 2 + TextBox_Duration.Text
-                LastText = TextBox_Duration.Text
+                If IsNumeric(TextBox_Duration.Text) Then
+                    Dim p = 2 + TextBox_Duration.Text
+                    LastText = TextBox_Duration.Text
+                Else
+                    TextBox_Duration.Text = LastText
+                End If
             Catch
                 TextBox_Duration.Text = 2
                 LastText = TextBox_Duration.Text

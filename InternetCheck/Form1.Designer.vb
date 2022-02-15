@@ -182,6 +182,7 @@ Partial Class Form_Main
         'TextBox_Duration
         '
         Me.TextBox_Duration.Location = New System.Drawing.Point(289, 187)
+        Me.TextBox_Duration.MaxLength = 5
         Me.TextBox_Duration.Name = "TextBox_Duration"
         Me.TextBox_Duration.Size = New System.Drawing.Size(42, 23)
         Me.TextBox_Duration.TabIndex = 11
