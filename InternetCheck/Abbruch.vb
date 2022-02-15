@@ -1,8 +1,11 @@
-﻿Public Class Abbruch
+﻿Imports Newtonsoft.Json
+Public Class Abbruch
+    <JsonProperty("beginning")>
     Public Anfang As DateTime
     Private Ende_ As DateTime
     Private Dauer_ As TimeSpan
 
+    <JsonProperty("end")>
     Public Property Ende As DateTime
         Get
             Return Ende_
@@ -12,6 +15,7 @@
         End Set
     End Property
 
+    <JsonProperty("duration")>
     Public Property Dauer As TimeSpan
         Get
             Return Dauer_
@@ -48,5 +52,9 @@
     Public Function Clone()
         Dim TempAbbruch As New Abbruch(Anfang, Ende, Dauer)
         Return TempAbbruch
+    End Function
+
+    Public Function ToJson()
+        Return FromClass(Me)
     End Function
 End Class

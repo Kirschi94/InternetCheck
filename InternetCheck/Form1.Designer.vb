@@ -67,6 +67,7 @@ Partial Class Form_Main
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TheTimer = New System.Windows.Forms.Timer(Me.components)
         Me.TheBackgroundWorker = New System.ComponentModel.BackgroundWorker()
+        Me.FolderBrowserDialog_Export = New System.Windows.Forms.FolderBrowserDialog()
         Me.ContextMenuStrip_ListView.SuspendLayout()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
@@ -109,13 +110,13 @@ Partial Class Form_Main
         '
         Me.ContextMenuStrip_ListView.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportToolStripMenuItem, Me.DeleteItemsToolStripMenuItem})
         Me.ContextMenuStrip_ListView.Name = "ContextMenuStrip_ListView"
-        Me.ContextMenuStrip_ListView.Size = New System.Drawing.Size(181, 70)
+        Me.ContextMenuStrip_ListView.Size = New System.Drawing.Size(145, 48)
         '
         'ExportToolStripMenuItem
         '
         Me.ExportToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TojsonToolStripMenuItem, Me.TotxtToolStripMenuItem})
         Me.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem"
-        Me.ExportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExportToolStripMenuItem.Size = New System.Drawing.Size(144, 22)
         Me.ExportToolStripMenuItem.Text = "Export"
         '
         'TojsonToolStripMenuItem
@@ -135,7 +136,7 @@ Partial Class Form_Main
         'DeleteItemsToolStripMenuItem
         '
         Me.DeleteItemsToolStripMenuItem.Name = "DeleteItemsToolStripMenuItem"
-        Me.DeleteItemsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.DeleteItemsToolStripMenuItem.Size = New System.Drawing.Size(144, 22)
         Me.DeleteItemsToolStripMenuItem.Text = "Delete item/s"
         '
         'Label_Losses
@@ -452,6 +453,12 @@ Partial Class Form_Main
         'TheBackgroundWorker
         '
         '
+        'FolderBrowserDialog_Export
+        '
+        Me.FolderBrowserDialog_Export.Description = "Choose the folder where the file/s should be exported to"
+        Me.FolderBrowserDialog_Export.RootFolder = System.Environment.SpecialFolder.Startup
+        Me.FolderBrowserDialog_Export.UseDescriptionForTitle = True
+        '
         'Form_Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -518,4 +525,5 @@ Partial Class Form_Main
     Friend WithEvents TojsonToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents TotxtToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents DeleteItemsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents FolderBrowserDialog_Export As FolderBrowserDialog
 End Class

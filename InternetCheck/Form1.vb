@@ -10,6 +10,8 @@ Public Class Form_Main
     Dim Starting As Boolean = True
     Dim NonUserAction As Boolean = False
     Dim LastText As String = ""
+    Dim FolderPathJson As String = ""
+    Dim FolderPathTxt As String = ""
     Public Shared Wave1 As New NAudio.Wave.WaveOut
 
 #Region "Connection Management"
@@ -184,6 +186,49 @@ Public Class Form_Main
         TojsonToolStripMenuItem.Enabled = MoreThanZero
         TotxtToolStripMenuItem.Enabled = MoreThanZero
     End Sub
+
+    Private Function GetSelectedItems()
+        Dim TempListOfAbbruch As New List(Of Abbruch)
+        For Each TheItem As ListViewItem In ListView_Losses.SelectedItems
+            Dim TheDate As New DateTime(TheItem.SubItems(3).Text)
+            For Each RealItem In ListOfAbbruch
+                If TheDate = RealItem.Anfang Then TempListOfAbbruch.Add(RealItem) : Exit For
+            Next
+        Next
+        Return TempListOfAbbruch
+    End Function
+
+    Private Sub ExportToJson(Path As String)
+        If Path = "" Or IsNothing(Path) Or Not IO.Directory.Exists(Path) Then
+            IO.Directory.CreateDirectory(Application.StartupPath & "Jsons\")
+            Path = Application.StartupPath & "Jsons\"
+        End If
+        If Not Path.EndsWith("\") Then Path = Path & "\"
+
+        Dim TempListOA As List(Of Abbruch) = GetSelectedItems()
+        For Each TheItem As Abbruch In TempListOA
+            IO.File.WriteAllText(Path & $"{TheItem.Anfang:yyyy-MM-dd}, {TheItem.Anfang:HH.mm.ss}.json", TheItem.ToJson())
+        Next
+        MessageBox.Show($"File/s successfully exported to {Path}.", "Task completed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub ExportToTxtFile(Path As String)
+        If Path = "" Or IsNothing(Path) Or Not IO.Directory.Exists(Path) Then
+            IO.Directory.CreateDirectory(Application.StartupPath & "Txts\")
+            Path = Application.StartupPath & "Txts\"
+        End If
+        If Not Path.EndsWith("\") Then Path = Path & "\"
+
+        For Each TheItem As ListViewItem In ListView_Losses.SelectedItems
+            Dim TheDate As New DateTime(TheItem.SubItems(3).Text)
+            IO.File.WriteAllText(Path & $"{TheDate:yyyy-MM-dd}, {TheDate:HH.mm.ss}.txt", GetTextFromItem(TheItem))
+        Next
+        MessageBox.Show($"File/s successfully exported to {Path}.", "Task completed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Function GetTextFromItem(TheItem As ListViewItem)
+        Return $"Beginning: {TheItem.SubItems(0).Text}{vbCrLf}End: {TheItem.SubItems(1).Text}{vbCrLf}Duration: {TheItem.SubItems(2).Text}"
+    End Function
 #End Region
 #Region "Application start and stop"
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -268,6 +313,8 @@ Public Class Form_Main
         iniString &= $"Start checking on program startup:{CheckBox_Autostart.Checked}{vbCrLf}"
         iniString &= $"Start minimized:{CheckBox_StartMin.Checked}{vbCrLf}"
         iniString &= $"Connectionlog min-duration:""{TextBox_Duration.Text}""{vbCrLf}"
+        iniString &= $"txt files folder:""{FolderPathTxt}""{vbCrLf}"
+        iniString &= $"json files folder:""{FolderPathJson}""{vbCrLf}"
         iniString &= $"Windowsize:{Size.Width},{Size.Height}{vbCrLf}"
         iniString &= $"Windowposition:{Location.X},{Location.Y}{vbCrLf}"
 
@@ -303,6 +350,8 @@ Public Class Form_Main
                 If Line.StartsWith("Start minimized:") Then CheckBox_StartMin.Checked = Line.Substring(16, Line.Length - (16)) : _
                     StartMinTSMI.Checked = CheckBox_StartMin.Checked : Continue For
                 If Line.StartsWith("Connectionlog min-duration:") Then TextBox_Duration.Text = Line.Substring(28, Line.Length - (28 + 1)) : Continue For
+                If Line.StartsWith("txt files folder:") Then FolderPathTxt = Line.Substring(18, Line.Length - (18 + 1)) : Continue For
+                If Line.StartsWith("json files folder:") Then FolderPathTxt = Line.Substring(19, Line.Length - (19 + 1)) : Continue For
                 If Line.StartsWith("Windowsize:") Then Size = New Size(Line.Substring(11, Line.IndexOf(",") - (11)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
                 If Line.StartsWith("Windowposition:") Then Location = New Point(Line.Substring(15, Line.IndexOf(",") - (15)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
                 If Convert.ToInt32(Line.Substring(15, Line.IndexOf(",") - (15))) < 0 OrElse Convert.ToInt32(Line.Substring(Line.IndexOf(",") + 1)) < 0 Then Location = New Point(0, 0)
@@ -311,7 +360,7 @@ Public Class Form_Main
                 EmptyLineCounter += 1
             End If
         Next
-        If (iniLines.Length - EmptyLineCounter) < 12 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        If (iniLines.Length - EmptyLineCounter) < 14 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub Save_Abbrüche()
@@ -426,9 +475,30 @@ Public Class Form_Main
         CMS_LV_DeActivate(ListView_Losses.SelectedItems.Count > 0)
     End Sub
 
+    Private Sub TojsonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TojsonToolStripMenuItem.Click
+        Try
+            FolderBrowserDialog_Export.SelectedPath = FolderPathJson
+            FolderBrowserDialog_Export.ShowDialog()
+            If IO.Directory.Exists(FolderBrowserDialog_Export.SelectedPath) Then FolderPathJson = FolderBrowserDialog_Export.SelectedPath
+            ExportToJson(FolderBrowserDialog_Export.SelectedPath)
+        Catch ex As Exception
+            MessageBox.Show($"The following error occurred while trying to export the item/s: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub TotxtToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TotxtToolStripMenuItem.Click
+        Try
+            FolderBrowserDialog_Export.SelectedPath = FolderPathTxt
+            FolderBrowserDialog_Export.ShowDialog()
+            If IO.Directory.Exists(FolderBrowserDialog_Export.SelectedPath) Then FolderPathTxt = FolderBrowserDialog_Export.SelectedPath
+            ExportToTxtFile(FolderBrowserDialog_Export.SelectedPath)
+        Catch ex As Exception
+            MessageBox.Show($"The following error occurred while trying to export the item/s: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
 #End Region
-#Region "CheckedChanged handeling"
+#Region "CheckedChanged handling"
     Private Sub CheckedChanged(TheCheckbox As CheckBox, TSMI As ToolStripMenuItem, Optional FromCheckbox As Boolean = False)
         If Not Starting Then
             If FromCheckbox Then
