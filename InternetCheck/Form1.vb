@@ -11,29 +11,8 @@ Public Class Form_Main
     Dim NonUserAction As Boolean = False
     Dim LastText As String = ""
     Public Shared Wave1 As New NAudio.Wave.WaveOut
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button_CheckButton.Click
-        Select Case Button_CheckButton.Text
-            Case "Start checking"
-                DeReActivatedChecking(True)
-                AddToLog("Started monitoring the internet connection.")
-            Case "Stop checking"
-                TheNotifyIcon.Icon = My.Resources.I_4b
-                DeReActivatedChecking(False)
-                AddToLog("Stopped monitoring the internet connection.")
-            Case Else
-                Throw New NotImplementedException("This should not be able to happen at all. Please contact me asap.")
-        End Select
-    End Sub
 
-    Private Sub DeReActivatedChecking(state As Boolean)
-        TheTimer.Enabled = state
-        Button_CheckButton.Text = If(state, "Stop checking", "Start checking")
-    End Sub
-
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles TheTimer.Tick
-        CheckConnection()
-    End Sub
-
+#Region "Connection Management"
     Private Sub CheckConnection()
         If Abbruchtest Then
             Threading.Thread.Sleep(1000)
@@ -74,12 +53,24 @@ Public Class Form_Main
         End If
     End Sub
 
-    Private Sub ShowBalloonTip(Optional Title As String = "", Optional Text As String = "")
-        TheNotifyIcon.BalloonTipTitle = Title
-        TheNotifyIcon.BalloonTipText = Text
-        TheNotifyIcon.ShowBalloonTip(8000)
+    Private Sub Connection_Existent()
+        TheNotifyIcon.Icon = My.Resources.I_4_gr
+        If Lost_Connection AndAlso Not IsNothing(TempAbbruch) Then
+            TempAbbruch.Set_End(DateTime.Now)
+            Lost_Connection = False
+            Try
+                If TempAbbruch.Dauer.TotalMinutes > Convert.ToInt32(TextBox_Duration.Text) Then ListOfAbbruch.Add(TempAbbruch.Clone())
+            Catch
+                ListOfAbbruch.Add(TempAbbruch.Clone())
+            End Try
+            TempAbbruch = Nothing
+            AddToLog("Internet connection has been reestablished.")
+            If CheckBox_ConBack.Checked Then PlaySound(False)
+            If CheckBox_Notify.Checked Then ShowBalloonTip("Internet connection reestablished", "Internet connection has been reestablished.")
+        End If
     End Sub
-
+#End Region
+#Region "Audio Playback"
     Private Sub PlayStandard(Lost As Boolean)
         Try
             If Lost Then
@@ -131,29 +122,8 @@ Public Class Form_Main
             End If
         End If
     End Sub
-
-    Private Sub AddToLog(ByVal Text As String)
-        Dim Output As String = $"[{DateTime.Now:yyyy-MM-dd}, {DateTime.Now:HH:mm:ss}] {Text}"
-        RichTextBox_Log.Text = Output & vbCrLf & RichTextBox_Log.Text
-    End Sub
-
-    Private Sub Connection_Existent()
-        TheNotifyIcon.Icon = My.Resources.I_4_gr
-        If Lost_Connection AndAlso Not IsNothing(TempAbbruch) Then
-            TempAbbruch.Set_End(DateTime.Now)
-            Lost_Connection = False
-            Try
-                If TempAbbruch.Dauer.TotalMinutes > Convert.ToInt32(TextBox_Duration.Text) Then ListOfAbbruch.Add(TempAbbruch.Clone())
-            Catch
-                ListOfAbbruch.Add(TempAbbruch.Clone())
-            End Try
-            TempAbbruch = Nothing
-            AddToLog("Internet connection has been reestablished.")
-            If CheckBox_ConBack.Checked Then PlaySound(False)
-            If CheckBox_Notify.Checked Then ShowBalloonTip("Internet connection reestablished", "Internet connection has been reestablished.")
-        End If
-    End Sub
-
+#End Region
+#Region "Visuals and remainder"
     Private Sub Update_Listview()
         ListView_Losses.Items.Clear()
         For Each Itum In ListOfAbbruch
@@ -164,6 +134,34 @@ Public Class Form_Main
         Next
     End Sub
 
+    Private Sub ShowBalloonTip(Optional Title As String = "", Optional Text As String = "")
+        TheNotifyIcon.BalloonTipTitle = Title
+        TheNotifyIcon.BalloonTipText = Text
+        TheNotifyIcon.ShowBalloonTip(8000)
+    End Sub
+
+    Private Sub DeReActivatedChecking(state As Boolean)
+        TheTimer.Enabled = state
+        Button_CheckButton.Text = If(state, "Stop checking", "Start checking")
+    End Sub
+
+    Private Sub AddToLog(ByVal Text As String)
+        Dim Output As String = $"[{DateTime.Now:yyyy-MM-dd}, {DateTime.Now:HH:mm:ss}] {Text}"
+        RichTextBox_Log.Text = Output & vbCrLf & RichTextBox_Log.Text
+    End Sub
+
+    Private Function SingleCheck(host As String)
+        Try
+            Dim myPing As New Ping()
+            Dim buffer As Byte() = New Byte(31) {}
+            Dim timeout As Integer = 1000
+            Dim pingOptions As New PingOptions()
+            Dim reply As PingReply = myPing.Send(host, timeout, buffer, pingOptions)
+            Return (reply.Status = IPStatus.Success)
+        Catch
+            Return False
+        End Try
+    End Function
     Private Function Duration_Stringbuilder(Dauer As TimeSpan)
         Dim Output As String = ""
         If Dauer.Days > 0 Then
@@ -178,20 +176,8 @@ Public Class Form_Main
         End If
         Return Output
     End Function
-
-    Private Function SingleCheck(host As String)
-        Try
-            Dim myPing As New Ping()
-            Dim buffer As Byte() = New Byte(31) {}
-            Dim timeout As Integer = 1000
-            Dim pingOptions As New PingOptions()
-            Dim reply As PingReply = myPing.Send(host, timeout, buffer, pingOptions)
-            Return (reply.Status = IPStatus.Success)
-        Catch
-            Return False
-        End Try
-    End Function
-
+#End Region
+#Region "Application start and stop"
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         AddToLog("Application starting..")
 
@@ -260,7 +246,8 @@ Public Class Form_Main
             e.Cancel = True
         End If
     End Sub
-
+#End Region
+#Region "Saving and Loading"
     Private Sub Save_ini()
         Dim iniString As String = ""
         iniString &= $"Connection lost Sound:""{TextBox_ConLost.Text}""{vbCrLf}"
@@ -337,7 +324,21 @@ Public Class Form_Main
                 ListOfAbbruch.Add(New Abbruch(New DateTime(Convert.ToInt64(Line.Substring(0, Line.IndexOf(";")))), New TimeSpan(Convert.ToInt64(Line.Substring(Line.IndexOf(";") + 1, Line.Length - (Line.IndexOf(";") + 1))))))
         Next
     End Sub
-
+#End Region
+#Region "Windows Forms Controls"
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button_CheckButton.Click
+        Select Case Button_CheckButton.Text
+            Case "Start checking"
+                DeReActivatedChecking(True)
+                AddToLog("Started monitoring the internet connection.")
+            Case "Stop checking"
+                TheNotifyIcon.Icon = My.Resources.I_4b
+                DeReActivatedChecking(False)
+                AddToLog("Stopped monitoring the internet connection.")
+            Case Else
+                Throw New NotImplementedException("This should not be able to happen at all. Please contact me asap.")
+        End Select
+    End Sub
     Private Sub Button_Debug_Click(sender As Object, e As EventArgs) Handles Button_Debug.Click
         If Abbruchtest Then
             Button_Debug.Text = "Lose Connection [DEBUG]"
@@ -369,6 +370,24 @@ Public Class Form_Main
         WindowState = FormWindowState.Normal
     End Sub
 
+    Private Sub TheTimer_Tick(sender As Object, e As EventArgs) Handles TheTimer.Tick
+        CheckConnection()
+    End Sub
+    Private Sub TextBox_Duration_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox_Duration.KeyPress
+        Try
+            Dim p = 2 + TextBox_Duration.Text
+            LastText = TextBox_Duration.Text
+        Catch
+            TextBox_Duration.Text = LastText
+            Try
+                Dim p = 2 + TextBox_Duration.Text
+                LastText = TextBox_Duration.Text
+            Catch
+                TextBox_Duration.Text = 2
+            End Try
+        End Try
+    End Sub
+#End Region
 #Region "CheckedChanged handeling"
     Private Sub CheckedChanged(TheCheckbox As CheckBox, TSMI As ToolStripMenuItem, Optional FromCheckbox As Boolean = False)
         If Not Starting Then
@@ -481,21 +500,6 @@ Public Class Form_Main
             CheckedChanged(CheckBox_WinStart, WinStartTSMI, True)
             NonUserAction = False
         End If
-    End Sub
-
-    Private Sub TextBox_Duration_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox_Duration.KeyPress
-        Try
-            Dim p = 2 + TextBox_Duration.Text
-            LastText = TextBox_Duration.Text
-        Catch
-            TextBox_Duration.Text = LastText
-            Try
-                Dim p = 2 + TextBox_Duration.Text
-                LastText = TextBox_Duration.Text
-            Catch
-                TextBox_Duration.Text = 2
-            End Try
-        End Try
     End Sub
 #End Region
 End Class
