@@ -66,6 +66,7 @@ Public Class Form_Main
                 ListOfAbbruch.Add(TempAbbruch.Clone())
             End Try
             TempAbbruch = Nothing
+            Update_Listview()
             AddToLog("Internet connection has been reestablished.")
             If CheckBox_ConBack.Checked Then PlaySound(False)
             If CheckBox_Notify.Checked Then ShowBalloonTip("Internet connection reestablished", "Internet connection has been reestablished.")
@@ -90,6 +91,7 @@ Public Class Form_Main
             End If
         Catch ex As Exception
             MessageBox.Show($"Standard Audiofile could not be played.{vbCrLf}The following error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            AddToLog($"Failed in playing the standard sound. The following error occurred: {ex.Message}")
         End Try
     End Sub
 
@@ -185,6 +187,7 @@ Public Class Form_Main
         ExportToolStripMenuItem.Enabled = MoreThanZero
         TojsonToolStripMenuItem.Enabled = MoreThanZero
         TotxtToolStripMenuItem.Enabled = MoreThanZero
+        CopyToClipboardToolStripMenuItem.Enabled = MoreThanZero
     End Sub
 
     Private Function GetSelectedItems()
@@ -210,6 +213,7 @@ Public Class Form_Main
             IO.File.WriteAllText(Path & $"{TheItem.Anfang:yyyy-MM-dd}, {TheItem.Anfang:HH.mm.ss}.json", TheItem.ToJson())
         Next
         MessageBox.Show($"File/s successfully exported to {Path}.", "Task completed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        AddToLog($"Exported {TempListOA.Count} items to json.")
     End Sub
 
     Private Sub ExportToTxtFile(Path As String)
@@ -224,6 +228,7 @@ Public Class Form_Main
             IO.File.WriteAllText(Path & $"{TheDate:yyyy-MM-dd}, {TheDate:HH.mm.ss}.txt", GetTextFromItem(TheItem))
         Next
         MessageBox.Show($"File/s successfully exported to {Path}.", "Task completed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        AddToLog($"Exported {ListView_Losses.SelectedItems.Count} items to txt.")
     End Sub
 
     Private Function GetTextFromItem(TheItem As ListViewItem)
@@ -395,6 +400,7 @@ Public Class Form_Main
             Case Else
                 Throw New NotImplementedException("This should not be able to happen at all. Please contact me asap.")
         End Select
+        StartCheckingToolStripMenuItem.Text = Button_CheckButton.Text
     End Sub
     Private Sub Button_Debug_Click(sender As Object, e As EventArgs) Handles Button_Debug.Click
         If Abbruchtest Then
@@ -461,6 +467,7 @@ Public Class Form_Main
 
     Private Sub DeleteItemsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteItemsToolStripMenuItem.Click
         If MessageBox.Show("Do you really want to delete the selected item/s?", "InternetCheck", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            Dim tmpCount As Integer = ListView_Losses.SelectedItems.Count
             For Each TheItem As ListViewItem In ListView_Losses.SelectedItems
                 Dim TheDate As New DateTime(TheItem.SubItems(3).Text)
                 For Each RealItem In ListOfAbbruch
@@ -468,6 +475,7 @@ Public Class Form_Main
                 Next
             Next
             Update_Listview()
+            AddToLog($"Deleted {tmpCount} items from main list.")
         End If
     End Sub
 
@@ -483,6 +491,7 @@ Public Class Form_Main
             ExportToJson(FolderBrowserDialog_Export.SelectedPath)
         Catch ex As Exception
             MessageBox.Show($"The following error occurred while trying to export the item/s: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AddToLog($"Failed in exporting item/s to json. The following error occurred: {ex.Message}")
         End Try
     End Sub
 
@@ -494,9 +503,22 @@ Public Class Form_Main
             ExportToTxtFile(FolderBrowserDialog_Export.SelectedPath)
         Catch ex As Exception
             MessageBox.Show($"The following error occurred while trying to export the item/s: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AddToLog($"Failed in exporting item/s to txt. The following error occurred: {ex.Message}")
         End Try
     End Sub
 
+    Private Sub CopyToClipboardToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyToClipboardToolStripMenuItem.Click
+        Dim TempString As String = ""
+        For Each TheItem In ListView_Losses.SelectedItems
+            TempString &= $"{GetTextFromItem(TheItem)}{vbCrLf}{vbCrLf}"
+        Next
+        Clipboard.SetText(TempString.Remove(TempString.Length - 2, 2))
+        MessageBox.Show($"Successfully copied content/s of item/s to the clipboard.", "Task completed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub StartCheckingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles StartCheckingToolStripMenuItem.Click
+        Button1_Click(Nothing, Nothing)
+    End Sub
 #End Region
 #Region "CheckedChanged handling"
     Private Sub CheckedChanged(TheCheckbox As CheckBox, TSMI As ToolStripMenuItem, Optional FromCheckbox As Boolean = False)

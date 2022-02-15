@@ -29,6 +29,7 @@ Partial Class Form_Main
         Me.ColumnHeader2 = New System.Windows.Forms.ColumnHeader()
         Me.ColumnHeader3 = New System.Windows.Forms.ColumnHeader()
         Me.ContextMenuStrip_ListView = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.CopyToClipboardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TojsonToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TotxtToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -68,6 +69,7 @@ Partial Class Form_Main
         Me.TheTimer = New System.Windows.Forms.Timer(Me.components)
         Me.TheBackgroundWorker = New System.ComponentModel.BackgroundWorker()
         Me.FolderBrowserDialog_Export = New System.Windows.Forms.FolderBrowserDialog()
+        Me.StartCheckingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip_ListView.SuspendLayout()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
@@ -108,15 +110,21 @@ Partial Class Form_Main
         '
         'ContextMenuStrip_ListView
         '
-        Me.ContextMenuStrip_ListView.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportToolStripMenuItem, Me.DeleteItemsToolStripMenuItem})
+        Me.ContextMenuStrip_ListView.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToClipboardToolStripMenuItem, Me.ExportToolStripMenuItem, Me.DeleteItemsToolStripMenuItem})
         Me.ContextMenuStrip_ListView.Name = "ContextMenuStrip_ListView"
-        Me.ContextMenuStrip_ListView.Size = New System.Drawing.Size(145, 48)
+        Me.ContextMenuStrip_ListView.Size = New System.Drawing.Size(172, 70)
+        '
+        'CopyToClipboardToolStripMenuItem
+        '
+        Me.CopyToClipboardToolStripMenuItem.Name = "CopyToClipboardToolStripMenuItem"
+        Me.CopyToClipboardToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
+        Me.CopyToClipboardToolStripMenuItem.Text = "Copy to Clipboard"
         '
         'ExportToolStripMenuItem
         '
         Me.ExportToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TojsonToolStripMenuItem, Me.TotxtToolStripMenuItem})
         Me.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem"
-        Me.ExportToolStripMenuItem.Size = New System.Drawing.Size(144, 22)
+        Me.ExportToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
         Me.ExportToolStripMenuItem.Text = "Export"
         '
         'TojsonToolStripMenuItem
@@ -136,7 +144,7 @@ Partial Class Form_Main
         'DeleteItemsToolStripMenuItem
         '
         Me.DeleteItemsToolStripMenuItem.Name = "DeleteItemsToolStripMenuItem"
-        Me.DeleteItemsToolStripMenuItem.Size = New System.Drawing.Size(144, 22)
+        Me.DeleteItemsToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
         Me.DeleteItemsToolStripMenuItem.Text = "Delete item/s"
         '
         'Label_Losses
@@ -379,21 +387,21 @@ Partial Class Form_Main
         '
         'ContextMenuStrip_NotIcon
         '
-        Me.ContextMenuStrip_NotIcon.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.ContextMenuStrip_NotIcon.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowToolStripMenuItem, Me.StartCheckingToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.ContextMenuStrip_NotIcon.Name = "ContextMenuStrip_NotIcon"
-        Me.ContextMenuStrip_NotIcon.Size = New System.Drawing.Size(117, 70)
+        Me.ContextMenuStrip_NotIcon.Size = New System.Drawing.Size(166, 92)
         '
         'ShowToolStripMenuItem
         '
         Me.ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
-        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
-        Me.ShowToolStripMenuItem.Text = "Show"
+        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.ShowToolStripMenuItem.Text = "Show application"
         '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConLostTSMI, Me.ConBackTSMI, Me.NotifyTSMI, Me.LogSaveTSMI, Me.AutostartTSMI, Me.StartMinTSMI, Me.WinStartTSMI})
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
         Me.OptionsToolStripMenuItem.Text = "Options"
         '
         'ConLostTSMI
@@ -443,7 +451,7 @@ Partial Class Form_Main
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'TheTimer
@@ -458,6 +466,12 @@ Partial Class Form_Main
         Me.FolderBrowserDialog_Export.Description = "Choose the folder where the file/s should be exported to"
         Me.FolderBrowserDialog_Export.RootFolder = System.Environment.SpecialFolder.Startup
         Me.FolderBrowserDialog_Export.UseDescriptionForTitle = True
+        '
+        'StartCheckingToolStripMenuItem
+        '
+        Me.StartCheckingToolStripMenuItem.Name = "StartCheckingToolStripMenuItem"
+        Me.StartCheckingToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.StartCheckingToolStripMenuItem.Text = "Start checking"
         '
         'Form_Main
         '
@@ -526,4 +540,6 @@ Partial Class Form_Main
     Friend WithEvents TotxtToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents DeleteItemsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents FolderBrowserDialog_Export As FolderBrowserDialog
+    Friend WithEvents CopyToClipboardToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents StartCheckingToolStripMenuItem As ToolStripMenuItem
 End Class
