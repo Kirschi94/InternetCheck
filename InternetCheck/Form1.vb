@@ -218,35 +218,41 @@ Public Class Form_Main
     End Sub
 
     Private Sub Form_Main_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        AddToLog("Application stopping..")
-        Wave1.Dispose()
+        If (TheTimer.Enabled AndAlso
+            MessageBox.Show("Do you really want to close the application?", "InternetCheck", MessageBoxButtons.YesNo, MessageBoxIcon.Information) = DialogResult.Yes) _
+            Or Not TheTimer.Enabled Then
+            AddToLog("Application stopping..")
+            Wave1.Dispose()
 
-        Try
-            Save_ini()
-            AddToLog("Options saved.")
-        Catch ex As Exception
-            AddToLog("Options could not be saved.")
-        End Try
+            Try
+                Save_ini()
+                AddToLog("Options saved.")
+            Catch ex As Exception
+                AddToLog("Options could not be saved.")
+            End Try
 
-        Try
-            Save_log()
-        Catch ex As Exception
-            Dim TempCount As Integer = 0
-            While MessageBox.Show("Logfile could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
-                Save_log(Application.StartupPath & $"\Logs\{DateTime.Now:yyyy-MM-dd}, {DateTime.Now:HH.mm.ss}_{TempCount}.log")
-                TempCount += 1
-            End While
-        End Try
+            Try
+                Save_log()
+            Catch ex As Exception
+                Dim TempCount As Integer = 0
+                While MessageBox.Show("Logfile could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
+                    Save_log(Application.StartupPath & $"\Logs\{DateTime.Now:yyyy-MM-dd}, {DateTime.Now:HH.mm.ss}_{TempCount}.log")
+                    TempCount += 1
+                End While
+            End Try
 
-        Try
-            Save_Abbrüche()
-        Catch ex As Exception
-            Dim TempCount As Integer = 0
-            While MessageBox.Show("Connectionlog could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
-                Save_log(Application.StartupPath & $"\connectionslog_{TempCount}.bin")
-                TempCount += 1
-            End While
-        End Try
+            Try
+                Save_Abbrüche()
+            Catch ex As Exception
+                Dim TempCount As Integer = 0
+                While MessageBox.Show("Connectionlog could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
+                    Save_log(Application.StartupPath & $"\connectionslog_{TempCount}.bin")
+                    TempCount += 1
+                End While
+            End Try
+        Else
+            e.Cancel = True
+        End If
     End Sub
 
     Private Sub Save_ini()
