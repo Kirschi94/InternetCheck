@@ -303,7 +303,7 @@ Public Class Form_Main
                 EmptyLineCounter += 1
             End If
         Next
-        If (iniLines.Length - EmptyLineCounter) < 11 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        If (iniLines.Length - EmptyLineCounter) < 12 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub Save_Abbrüche()
@@ -371,8 +371,9 @@ Public Class Form_Main
     End Sub
 
     Private Sub TheTimer_Tick(sender As Object, e As EventArgs) Handles TheTimer.Tick
-        CheckConnection()
+        If Not TheBackgroundWorker.IsBusy Then TheBackgroundWorker.RunWorkerAsync()
     End Sub
+
     Private Sub TextBox_Duration_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox_Duration.KeyPress
         Try
             Dim p = 2 + TextBox_Duration.Text
@@ -384,8 +385,13 @@ Public Class Form_Main
                 LastText = TextBox_Duration.Text
             Catch
                 TextBox_Duration.Text = 2
+                LastText = TextBox_Duration.Text
             End Try
         End Try
+    End Sub
+
+    Private Sub TheBackgroundWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles TheBackgroundWorker.DoWork
+        CheckConnection()
     End Sub
 #End Region
 #Region "CheckedChanged handeling"
