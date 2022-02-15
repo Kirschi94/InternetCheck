@@ -57,6 +57,7 @@ Partial Class Form_Main
         Me.TheNotifyIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ContextMenuStrip_NotIcon = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.StartCheckingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ConLostTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ConBackTSMI = New System.Windows.Forms.ToolStripMenuItem()
@@ -69,7 +70,6 @@ Partial Class Form_Main
         Me.TheTimer = New System.Windows.Forms.Timer(Me.components)
         Me.TheBackgroundWorker = New System.ComponentModel.BackgroundWorker()
         Me.FolderBrowserDialog_Export = New System.Windows.Forms.FolderBrowserDialog()
-        Me.StartCheckingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip_ListView.SuspendLayout()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
@@ -380,6 +380,7 @@ Partial Class Form_Main
         '
         'TheNotifyIcon
         '
+        Me.TheNotifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.TheNotifyIcon.ContextMenuStrip = Me.ContextMenuStrip_NotIcon
         Me.TheNotifyIcon.Icon = CType(resources.GetObject("TheNotifyIcon.Icon"), System.Drawing.Icon)
         Me.TheNotifyIcon.Text = "InternetCheck"
@@ -396,6 +397,12 @@ Partial Class Form_Main
         Me.ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
         Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
         Me.ShowToolStripMenuItem.Text = "Show application"
+        '
+        'StartCheckingToolStripMenuItem
+        '
+        Me.StartCheckingToolStripMenuItem.Name = "StartCheckingToolStripMenuItem"
+        Me.StartCheckingToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.StartCheckingToolStripMenuItem.Text = "Start checking"
         '
         'OptionsToolStripMenuItem
         '
@@ -466,12 +473,6 @@ Partial Class Form_Main
         Me.FolderBrowserDialog_Export.Description = "Choose the folder where the file/s should be exported to"
         Me.FolderBrowserDialog_Export.RootFolder = System.Environment.SpecialFolder.Startup
         Me.FolderBrowserDialog_Export.UseDescriptionForTitle = True
-        '
-        'StartCheckingToolStripMenuItem
-        '
-        Me.StartCheckingToolStripMenuItem.Name = "StartCheckingToolStripMenuItem"
-        Me.StartCheckingToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
-        Me.StartCheckingToolStripMenuItem.Text = "Start checking"
         '
         'Form_Main
         '
