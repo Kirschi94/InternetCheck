@@ -28,6 +28,11 @@ Partial Class Form_Main
         Me.ColumnHeader1 = New System.Windows.Forms.ColumnHeader()
         Me.ColumnHeader2 = New System.Windows.Forms.ColumnHeader()
         Me.ColumnHeader3 = New System.Windows.Forms.ColumnHeader()
+        Me.ContextMenuStrip_ListView = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ExportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TojsonToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TotxtToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteItemsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Label_Losses = New System.Windows.Forms.Label()
         Me.Button_CheckButton = New System.Windows.Forms.Button()
         Me.TabControl_Main = New System.Windows.Forms.TabControl()
@@ -62,6 +67,7 @@ Partial Class Form_Main
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TheTimer = New System.Windows.Forms.Timer(Me.components)
         Me.TheBackgroundWorker = New System.ComponentModel.BackgroundWorker()
+        Me.ContextMenuStrip_ListView.SuspendLayout()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
         Me.TabPage_Options.SuspendLayout()
@@ -75,6 +81,7 @@ Partial Class Form_Main
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListView_Losses.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3})
+        Me.ListView_Losses.ContextMenuStrip = Me.ContextMenuStrip_ListView
         Me.ListView_Losses.HideSelection = False
         Me.ListView_Losses.Location = New System.Drawing.Point(8, 21)
         Me.ListView_Losses.Name = "ListView_Losses"
@@ -97,6 +104,39 @@ Partial Class Form_Main
         '
         Me.ColumnHeader3.Text = "Duration"
         Me.ColumnHeader3.Width = 150
+        '
+        'ContextMenuStrip_ListView
+        '
+        Me.ContextMenuStrip_ListView.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportToolStripMenuItem, Me.DeleteItemsToolStripMenuItem})
+        Me.ContextMenuStrip_ListView.Name = "ContextMenuStrip_ListView"
+        Me.ContextMenuStrip_ListView.Size = New System.Drawing.Size(181, 70)
+        '
+        'ExportToolStripMenuItem
+        '
+        Me.ExportToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TojsonToolStripMenuItem, Me.TotxtToolStripMenuItem})
+        Me.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem"
+        Me.ExportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExportToolStripMenuItem.Text = "Export"
+        '
+        'TojsonToolStripMenuItem
+        '
+        Me.TojsonToolStripMenuItem.Enabled = False
+        Me.TojsonToolStripMenuItem.Name = "TojsonToolStripMenuItem"
+        Me.TojsonToolStripMenuItem.Size = New System.Drawing.Size(114, 22)
+        Me.TojsonToolStripMenuItem.Text = "To .json"
+        '
+        'TotxtToolStripMenuItem
+        '
+        Me.TotxtToolStripMenuItem.Enabled = False
+        Me.TotxtToolStripMenuItem.Name = "TotxtToolStripMenuItem"
+        Me.TotxtToolStripMenuItem.Size = New System.Drawing.Size(114, 22)
+        Me.TotxtToolStripMenuItem.Text = "To .txt"
+        '
+        'DeleteItemsToolStripMenuItem
+        '
+        Me.DeleteItemsToolStripMenuItem.Name = "DeleteItemsToolStripMenuItem"
+        Me.DeleteItemsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.DeleteItemsToolStripMenuItem.Text = "Delete item/s"
         '
         'Label_Losses
         '
@@ -423,6 +463,7 @@ Partial Class Form_Main
         Me.MinimumSize = New System.Drawing.Size(377, 347)
         Me.Name = "Form_Main"
         Me.Text = "InternetCheck"
+        Me.ContextMenuStrip_ListView.ResumeLayout(False)
         Me.TabControl_Main.ResumeLayout(False)
         Me.TabPage_Overview.ResumeLayout(False)
         Me.TabPage_Overview.PerformLayout()
@@ -472,4 +513,9 @@ Partial Class Form_Main
     Friend WithEvents Label_Dur2 As Label
     Friend WithEvents Label_Dur1 As Label
     Friend WithEvents TheBackgroundWorker As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ContextMenuStrip_ListView As ContextMenuStrip
+    Friend WithEvents ExportToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TojsonToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TotxtToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DeleteItemsToolStripMenuItem As ToolStripMenuItem
 End Class

@@ -59,7 +59,7 @@ Public Class Form_Main
             TempAbbruch.Set_End(DateTime.Now)
             Lost_Connection = False
             Try
-                If TempAbbruch.Dauer.TotalMinutes > Convert.ToInt32(TextBox_Duration.Text) Then ListOfAbbruch.Add(TempAbbruch.Clone())
+                If TempAbbruch.Dauer.TotalMinutes > Convert.ToDouble(TextBox_Duration.Text) Then ListOfAbbruch.Add(TempAbbruch.Clone())
             Catch
                 ListOfAbbruch.Add(TempAbbruch.Clone())
             End Try
@@ -130,6 +130,7 @@ Public Class Form_Main
             With ListView_Losses.Items.Add($"{Itum.Anfang:yyyy-MM-dd}, {Itum.Anfang:HH:mm:ss}")
                 .SubItems.Add($"{Itum.Ende:yyyy-MM-dd}, {Itum.Ende:HH:mm:ss}")
                 .SubItems.Add($"{Duration_Stringbuilder(Itum.Dauer)}")
+                .SubItems.Add($"{Itum.Anfang.Ticks}")
             End With
         Next
     End Sub
@@ -176,6 +177,13 @@ Public Class Form_Main
         End If
         Return Output
     End Function
+
+    Private Sub CMS_LV_DeActivate(MoreThanZero As Boolean)
+        DeleteItemsToolStripMenuItem.Enabled = MoreThanZero
+        ExportToolStripMenuItem.Enabled = MoreThanZero
+        TojsonToolStripMenuItem.Enabled = MoreThanZero
+        TotxtToolStripMenuItem.Enabled = MoreThanZero
+    End Sub
 #End Region
 #Region "Application start and stop"
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -211,7 +219,7 @@ Public Class Form_Main
 
     Private Sub Form_Main_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If (TheTimer.Enabled AndAlso
-            MessageBox.Show("Do you really want to close the application?", "InternetCheck", MessageBoxButtons.YesNo, MessageBoxIcon.Information) = DialogResult.Yes) _
+            MessageBox.Show("Do you really want to close the application?", "InternetCheck", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes) _
             Or Not TheTimer.Enabled Then
             AddToLog("Application stopping..")
             Wave1.Dispose()
@@ -401,6 +409,24 @@ Public Class Form_Main
     Private Sub TheBackgroundWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles TheBackgroundWorker.DoWork
         CheckConnection()
     End Sub
+
+    Private Sub DeleteItemsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteItemsToolStripMenuItem.Click
+        If MessageBox.Show("Do you really want to delete the selected item/s?", "InternetCheck", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            For Each TheItem As ListViewItem In ListView_Losses.SelectedItems
+                Dim TheDate As New DateTime(TheItem.SubItems(3).Text)
+                For Each RealItem In ListOfAbbruch
+                    If TheDate = RealItem.Anfang Then ListOfAbbruch.Remove(RealItem) : Exit For
+                Next
+            Next
+            Update_Listview()
+        End If
+    End Sub
+
+    Private Sub ContextMenuStrip_ListView_Opening(sender As Object, e As CancelEventArgs) Handles ContextMenuStrip_ListView.Opening
+        CMS_LV_DeActivate(ListView_Losses.SelectedItems.Count > 0)
+    End Sub
+
+
 #End Region
 #Region "CheckedChanged handeling"
     Private Sub CheckedChanged(TheCheckbox As CheckBox, TSMI As ToolStripMenuItem, Optional FromCheckbox As Boolean = False)
