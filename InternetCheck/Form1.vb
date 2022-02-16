@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Net.NetworkInformation
 Imports System.Threading
+Imports System.Runtime.InteropServices
 
 Public Class Form_Main
     Dim Lost_Connection As Boolean = False
@@ -14,6 +15,25 @@ Public Class Form_Main
     Dim FolderPathTxt As String = ""
     Dim OmaeWaMouShindeiru As Boolean = False
     Public Shared Wave1 As New NAudio.Wave.WaveOut
+
+    Private Const SW_RESTORE As Integer = 9
+    <DllImport("user32.dll")>
+    Private Shared Function SetForegroundWindow(ByVal hWnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
+    End Function
+
+    Public Declare Function ShowWindowAsync Lib "user32" _
+         (ByVal hWnd As Long,
+          ByVal nCmdShow As Long) As Long
+
+    Private Declare Auto Function IsIconic Lib "user32.dll" (ByVal hwnd As IntPtr) As Boolean
+
+    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
+    Private Shared Function ShowWindow(ByVal hwnd As Integer, ByVal nCmdShow As Integer) As Boolean
+    End Function
+
+    Private Declare Function IsWindowVisible Lib "user32" _
+    Alias "IsWindowVisible" (ByVal hwnd As Long) As Long
+    'Dim i As IntPtr = (Int64)Handle
 
 #Region "Connection Management"
     Private Sub CheckConnection()
@@ -235,16 +255,30 @@ Public Class Form_Main
     Private Function GetTextFromItem(TheItem As ListViewItem)
         Return $"Beginning: {TheItem.SubItems(0).Text}{vbCrLf}End: {TheItem.SubItems(1).Text}{vbCrLf}Duration: {TheItem.SubItems(2).Text}"
     End Function
+
+    Private Sub CheckForOtherInstance()
+        Dim _process() As Process
+        _process = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName)
+        Dim proc As Process = Process.GetCurrentProcess()
+        Dim assemblyName As String = Process.GetCurrentProcess().ProcessName
+        For Each otherProc As Process In Process.GetProcessesByName(assemblyName)
+            If Not proc.Id = otherProc.Id Then
+                Dim hWnd As IntPtr = otherProc.MainWindowHandle
+                If IsIconic(hWnd) Then
+                    ShowWindow(hWnd, SW_RESTORE)
+                End If
+                SetForegroundWindow(hWnd)
+                Exit For
+            End If
+        Next
+        If _process.Length > 1 Then OmaeWaMouShindeiru = True : _
+            MessageBox.Show($"The program is already opened.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning) : _
+            Application.Exit() : Close() : Process.GetCurrentProcess().Kill()
+    End Sub
 #End Region
 #Region "Application start and stop"
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim _process() As Process
-        _process = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName)
-        'For Each Prozess In _process
-        'If Not Prozess.StartTime = Process.GetCurrentProcess().StartTime Then Prozess.MainModule.
-        'Next
-
-        If _process.Length > 1 Then OmaeWaMouShindeiru = True : Application.Exit() : Close() : Process.GetCurrentProcess().Kill()
+        CheckForOtherInstance()
 
         If Not OmaeWaMouShindeiru Then
             AddToLog("Application starting..")
