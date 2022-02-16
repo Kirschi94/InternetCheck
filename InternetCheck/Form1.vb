@@ -1,6 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Net.NetworkInformation
-Imports System.Text.RegularExpressions
+Imports System.Threading
 
 Public Class Form_Main
     Dim Lost_Connection As Boolean = False
@@ -12,6 +12,7 @@ Public Class Form_Main
     Dim LastText As String = ""
     Dim FolderPathJson As String = ""
     Dim FolderPathTxt As String = ""
+    Dim OmaeWaMouShindeiru As Boolean = False
     Public Shared Wave1 As New NAudio.Wave.WaveOut
 
 #Region "Connection Management"
@@ -237,71 +238,82 @@ Public Class Form_Main
 #End Region
 #Region "Application start and stop"
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        AddToLog("Application starting..")
+        Dim _process() As Process
+        _process = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName)
+        'For Each Prozess In _process
+        'If Not Prozess.StartTime = Process.GetCurrentProcess().StartTime Then Prozess.MainModule.
+        'Next
 
-        Try
-            Load_And_Apply_ini()
-            AddToLog("Options loaded.")
-        Catch ex As Exception
-            AddToLog("Options could not be loaded.")
-            If IO.File.Exists(Application.StartupPath & "\options.ini") Then
-                MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Else IO.File.Create(Application.StartupPath & "\options.ini") : AddToLog("Options file did not exist and was created.")
-            End If
-        End Try
+        If _process.Length > 1 Then OmaeWaMouShindeiru = True : Application.Exit() : Close() : Process.GetCurrentProcess().Kill()
 
-        Try
-            Load_Abbrüche()
-            AddToLog("Connectionlog loaded.")
-        Catch ex As Exception
-            AddToLog("Connectionlog could not be loaded.")
-            If IO.File.Exists(Application.StartupPath & "\connectionlog.bin") Then
-                MessageBox.Show("Connectionlog file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Else IO.File.Create(Application.StartupPath & "\connectionlog.bin") : AddToLog("Connectionlog file did not exist and was created.")
-            End If
-        End Try
+        If Not OmaeWaMouShindeiru Then
+            AddToLog("Application starting..")
+            Try
+                Load_And_Apply_ini()
+                AddToLog("Options loaded.")
+            Catch ex As Exception
+                AddToLog("Options could not be loaded.")
+                If IO.File.Exists(Application.StartupPath & "\options.ini") Then
+                    MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Else IO.File.Create(Application.StartupPath & "\options.ini") : AddToLog("Options file did not exist and was created.")
+                End If
+            End Try
 
-        Update_Listview()
-        If CheckBox_StartMin.Checked Then WindowState = FormWindowState.Minimized : Visible = False
-        If CheckBox_Autostart.Checked Then Button1_Click(Nothing, Nothing)
-        Starting = False
+            Try
+                Load_Abbrüche()
+                AddToLog("Connectionlog loaded.")
+            Catch ex As Exception
+                AddToLog("Connectionlog could not be loaded.")
+                If IO.File.Exists(Application.StartupPath & "\connectionlog.bin") Then
+                    MessageBox.Show("Connectionlog file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Else IO.File.Create(Application.StartupPath & "\connectionlog.bin") : AddToLog("Connectionlog file did not exist and was created.")
+                End If
+            End Try
+
+            Update_Listview()
+            If CheckBox_StartMin.Checked Then WindowState = FormWindowState.Minimized : Visible = False
+            If CheckBox_Autostart.Checked Then Button1_Click(Nothing, Nothing)
+            Starting = False
+        End If
     End Sub
 
     Private Sub Form_Main_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If (TheTimer.Enabled AndAlso
+        If Not Starting And Not OmaeWaMouShindeiru Then
+            If (TheTimer.Enabled AndAlso
             MessageBox.Show("Do you really want to close the application?", "InternetCheck", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes) _
             Or Not TheTimer.Enabled Then
-            AddToLog("Application stopping..")
-            Wave1.Dispose()
+                AddToLog("Application stopping..")
+                Wave1.Dispose()
 
-            Try
-                Save_ini()
-                AddToLog("Options saved.")
-            Catch ex As Exception
-                AddToLog("Options could not be saved.")
-            End Try
+                Try
+                    Save_ini()
+                    AddToLog("Options saved.")
+                Catch ex As Exception
+                    AddToLog("Options could not be saved.")
+                End Try
 
-            Try
-                Save_log()
-            Catch ex As Exception
-                Dim TempCount As Integer = 0
-                While MessageBox.Show("Logfile could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
-                    Save_log(Application.StartupPath & $"\Logs\{DateTime.Now:yyyy-MM-dd}, {DateTime.Now:HH.mm.ss}_{TempCount}.log")
-                    TempCount += 1
-                End While
-            End Try
+                Try
+                    Save_log()
+                Catch ex As Exception
+                    Dim TempCount As Integer = 0
+                    While MessageBox.Show("Logfile could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
+                        Save_log(Application.StartupPath & $"\Logs\{DateTime.Now:yyyy-MM-dd}, {DateTime.Now:HH.mm.ss}_{TempCount}.log")
+                        TempCount += 1
+                    End While
+                End Try
 
-            Try
-                Save_Abbrüche()
-            Catch ex As Exception
-                Dim TempCount As Integer = 0
-                While MessageBox.Show("Connectionlog could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
-                    Save_log(Application.StartupPath & $"\connectionslog_{TempCount}.bin")
-                    TempCount += 1
-                End While
-            End Try
-        Else
-            e.Cancel = True
+                Try
+                    Save_Abbrüche()
+                Catch ex As Exception
+                    Dim TempCount As Integer = 0
+                    While MessageBox.Show("Connectionlog could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
+                        Save_log(Application.StartupPath & $"\connectionslog_{TempCount}.bin")
+                        TempCount += 1
+                    End While
+                End Try
+            Else
+                e.Cancel = True
+            End If
         End If
     End Sub
 #End Region
