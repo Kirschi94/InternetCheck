@@ -41,10 +41,11 @@ Public Class Form_Main
             Threading.Thread.Sleep(1000)
             Connection_Lost()
         Else
+            Dim DT As DateTime = DateTime.Now
             If Not SingleCheck("google.com") Then
                 TheNotifyIcon.Icon = My.Resources.I_4_g
                 If Not SingleCheck("microsoft.com") Then
-                    If Not Lost_Connection Then AddToLog("Issues connecting to the internet.")
+                    If Not Lost_Connection Then AddToLog("Issues connecting to the internet.", DT)
                     If Not SingleCheck("gmx.com") Then
                         If Not SingleCheck("bing.com") Then
                             Connection_Lost()
@@ -171,8 +172,9 @@ Public Class Form_Main
         Button_CheckButton.Text = If(state, "Stop checking", "Start checking")
     End Sub
 
-    Private Sub AddToLog(ByVal Text As String)
-        Dim Output As String = $"[{DateTime.Now:yyyy-MM-dd}, {DateTime.Now:HH:mm:ss}] {Text}"
+    Private Sub AddToLog(ByVal Text As String, Optional DT As DateTime = Nothing)
+        If IsNothing(DT) Then DT = DateTime.Now
+        Dim Output As String = $"[{DT:yyyy-MM-dd}, {DT:HH:mm:ss}] {Text}"
         RichTextBox_Log.Text = Output & vbCrLf & RichTextBox_Log.Text
     End Sub
 
