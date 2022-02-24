@@ -2,6 +2,7 @@
 Imports System.Net.NetworkInformation
 Imports System.Threading
 Imports System.Runtime.InteropServices
+Imports Microsoft.Win32
 
 Public Class Form_Main
     Dim Lost_Connection As Boolean = False
@@ -15,6 +16,7 @@ Public Class Form_Main
     Dim FolderPathTxt As String = ""
     Dim OmaeWaMouShindeiru As Boolean = False
     Public Shared Wave1 As New NAudio.Wave.WaveOut
+    Dim LastGoodLocation As New Point(0, 0)
 
     Private Const SW_RESTORE As Integer = 9
     <DllImport("user32.dll")>
@@ -173,7 +175,7 @@ Public Class Form_Main
     End Sub
 
     Private Sub AddToLog(ByVal Text As String, Optional DT As DateTime = Nothing)
-        If IsNothing(DT) Then DT = DateTime.Now
+        If IsNothing(DT) Or DT.Ticks < 100 Then DT = DateTime.Now
         Dim Output As String = $"[{DT:yyyy-MM-dd}, {DT:HH:mm:ss}] {Text}"
         RichTextBox_Log.Text = Output & vbCrLf & RichTextBox_Log.Text
     End Sub
@@ -229,7 +231,7 @@ Public Class Form_Main
             IO.Directory.CreateDirectory(Application.StartupPath & "Jsons\")
             Path = Application.StartupPath & "Jsons\"
         End If
-        If Not Path.EndsWith("\") Then Path = Path & "\"
+        If Not Path.EndsWith("\") Then Path &= "\"
 
         Dim TempListOA As List(Of Abbruch) = GetSelectedItems()
         For Each TheItem As Abbruch In TempListOA
@@ -244,7 +246,7 @@ Public Class Form_Main
             IO.Directory.CreateDirectory(Application.StartupPath & "Txts\")
             Path = Application.StartupPath & "Txts\"
         End If
-        If Not Path.EndsWith("\") Then Path = Path & "\"
+        If Not Path.EndsWith("\") Then Path &= "\"
 
         For Each TheItem As ListViewItem In ListView_Losses.SelectedItems
             Dim TheDate As New DateTime(TheItem.SubItems(3).Text)
@@ -294,6 +296,7 @@ Public Class Form_Main
                 Else IO.File.Create(Application.StartupPath & "\options.ini") : AddToLog("Options file did not exist and was created.")
                 End If
             End Try
+            If CheckBox_StartMin.Checked Then Visible = False
 
             Try
                 Load_Abbrüche()
@@ -307,9 +310,10 @@ Public Class Form_Main
             End Try
 
             Update_Listview()
-            If CheckBox_StartMin.Checked Then WindowState = FormWindowState.Minimized : Visible = False
+            If CheckBox_StartMin.Checked Then Timer_Minimize.Enabled = True
             If CheckBox_Autostart.Checked Then Button1_Click(Nothing, Nothing)
             Starting = False
+        Else Visible = False
         End If
     End Sub
 
@@ -318,6 +322,9 @@ Public Class Form_Main
             If (TheTimer.Enabled AndAlso
             MessageBox.Show("Do you really want to close the application?", "InternetCheck", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes) _
             Or Not TheTimer.Enabled Then
+
+                If TheTimer.Enabled Then Button1_Click(Nothing, Nothing)
+
                 AddToLog("Application stopping..")
                 Wave1.Dispose()
 
@@ -353,6 +360,19 @@ Public Class Form_Main
         End If
     End Sub
 #End Region
+#Region "Start on Windows start"
+    Private Sub AddToStartup()
+        Dim CU As RegistryKey = Registry.CurrentUser.CreateSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run")
+        CU.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
+        CU.SetValue("InternetCheck", Application.ExecutablePath.ToString)
+        CU.Close()
+    End Sub
+
+    Private Sub RemoveFromStartup()
+        Dim CU As RegistryKey = Registry.CurrentUser.CreateSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run")
+        CU.DeleteValue("InternetCheck")
+    End Sub
+#End Region
 #Region "Saving and Loading"
     Private Sub Save_ini()
         Dim iniString As String = ""
@@ -369,7 +389,7 @@ Public Class Form_Main
         iniString &= $"txt files folder:""{FolderPathTxt}""{vbCrLf}"
         iniString &= $"json files folder:""{FolderPathJson}""{vbCrLf}"
         iniString &= $"Windowsize:{Size.Width},{Size.Height}{vbCrLf}"
-        iniString &= $"Windowposition:{Location.X},{Location.Y}{vbCrLf}"
+        iniString &= $"Windowposition:{LastGoodLocation.X},{LastGoodLocation.Y}{vbCrLf}"
 
         IO.File.WriteAllText(Application.StartupPath & "\options.ini", iniString)
     End Sub
@@ -567,6 +587,15 @@ Public Class Form_Main
     Private Sub StartCheckingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles StartCheckingToolStripMenuItem.Click
         Button1_Click(Nothing, Nothing)
     End Sub
+
+    Private Sub Form_Main_LocationChanged(sender As Object, e As EventArgs) Handles Me.LocationChanged
+        If Not Location.X < 0 And Not Location.Y < 0 Then LastGoodLocation = New Point(Location.X, Location.Y)
+    End Sub
+
+    Private Sub Timer_Minimize_Tick(sender As Object, e As EventArgs) Handles Timer_Minimize.Tick
+        WindowState = FormWindowState.Minimized
+        Timer_Minimize.Enabled = False
+    End Sub
 #End Region
 #Region "CheckedChanged handling"
     Private Sub CheckedChanged(TheCheckbox As CheckBox, TSMI As ToolStripMenuItem, Optional FromCheckbox As Boolean = False)
@@ -679,6 +708,23 @@ Public Class Form_Main
         Else
             CheckedChanged(CheckBox_WinStart, WinStartTSMI, True)
             NonUserAction = False
+        End If
+        If CheckBox_WinStart.Checked Then
+            Try
+                AddToStartup()
+                AddToLog("Application added to windows startup.")
+            Catch ex As Exception
+                MessageBox.Show($"Application could not be added to windows startup.{vbCrLf}The following error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                AddToLog($"Failed in adding the application to windows startup. The following error occurred: {ex.Message}")
+            End Try
+        Else
+            Try
+                RemoveFromStartup()
+                AddToLog("Application removed from autostart.")
+            Catch ex As Exception
+                MessageBox.Show($"Application could not be removed from windows startup.{vbCrLf}The following error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                AddToLog($"Failed in removing the application from windows startup. The following error occurred: {ex.Message}")
+            End Try
         End If
     End Sub
 #End Region

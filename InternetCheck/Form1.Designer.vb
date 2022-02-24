@@ -70,6 +70,7 @@ Partial Class Form_Main
         Me.TheTimer = New System.Windows.Forms.Timer(Me.components)
         Me.TheBackgroundWorker = New System.ComponentModel.BackgroundWorker()
         Me.FolderBrowserDialog_Export = New System.Windows.Forms.FolderBrowserDialog()
+        Me.Timer_Minimize = New System.Windows.Forms.Timer(Me.components)
         Me.ContextMenuStrip_ListView.SuspendLayout()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
@@ -259,7 +260,6 @@ Partial Class Form_Main
         'CheckBox_StartMin
         '
         Me.CheckBox_StartMin.AutoSize = True
-        Me.CheckBox_StartMin.Enabled = False
         Me.CheckBox_StartMin.Location = New System.Drawing.Point(8, 162)
         Me.CheckBox_StartMin.Name = "CheckBox_StartMin"
         Me.CheckBox_StartMin.Size = New System.Drawing.Size(109, 19)
@@ -305,7 +305,6 @@ Partial Class Form_Main
         '
         Me.CheckBox_WinStart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox_WinStart.AutoSize = True
-        Me.CheckBox_WinStart.Enabled = False
         Me.CheckBox_WinStart.Location = New System.Drawing.Point(8, 403)
         Me.CheckBox_WinStart.Name = "CheckBox_WinStart"
         Me.CheckBox_WinStart.Size = New System.Drawing.Size(159, 19)
@@ -443,14 +442,12 @@ Partial Class Form_Main
         '
         'StartMinTSMI
         '
-        Me.StartMinTSMI.Enabled = False
         Me.StartMinTSMI.Name = "StartMinTSMI"
         Me.StartMinTSMI.Size = New System.Drawing.Size(361, 22)
         Me.StartMinTSMI.Text = "Start minimized"
         '
         'WinStartTSMI
         '
-        Me.WinStartTSMI.Enabled = False
         Me.WinStartTSMI.Name = "WinStartTSMI"
         Me.WinStartTSMI.Size = New System.Drawing.Size(361, 22)
         Me.WinStartTSMI.Text = "Start on Windows startup"
@@ -473,6 +470,10 @@ Partial Class Form_Main
         Me.FolderBrowserDialog_Export.Description = "Choose the folder where the file/s should be exported to"
         Me.FolderBrowserDialog_Export.RootFolder = System.Environment.SpecialFolder.Startup
         Me.FolderBrowserDialog_Export.UseDescriptionForTitle = True
+        '
+        'Timer_Minimize
+        '
+        Me.Timer_Minimize.Interval = 10
         '
         'Form_Main
         '
@@ -543,4 +544,5 @@ Partial Class Form_Main
     Friend WithEvents FolderBrowserDialog_Export As FolderBrowserDialog
     Friend WithEvents CopyToClipboardToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents StartCheckingToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents Timer_Minimize As Timer
 End Class
