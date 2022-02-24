@@ -389,73 +389,73 @@ Partial Class Form_Main
         '
         Me.ContextMenuStrip_NotIcon.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowToolStripMenuItem, Me.StartCheckingToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.ContextMenuStrip_NotIcon.Name = "ContextMenuStrip_NotIcon"
-        Me.ContextMenuStrip_NotIcon.Size = New System.Drawing.Size(166, 92)
+        Me.ContextMenuStrip_NotIcon.Size = New System.Drawing.Size(181, 114)
         '
         'ShowToolStripMenuItem
         '
         Me.ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
-        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ShowToolStripMenuItem.Text = "Show application"
         '
         'StartCheckingToolStripMenuItem
         '
         Me.StartCheckingToolStripMenuItem.Name = "StartCheckingToolStripMenuItem"
-        Me.StartCheckingToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.StartCheckingToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.StartCheckingToolStripMenuItem.Text = "Start checking"
         '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConLostTSMI, Me.ConBackTSMI, Me.NotifyTSMI, Me.LogSaveTSMI, Me.AutostartTSMI, Me.StartMinTSMI, Me.WinStartTSMI})
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.OptionsToolStripMenuItem.Text = "Options"
         '
         'ConLostTSMI
         '
         Me.ConLostTSMI.Name = "ConLostTSMI"
-        Me.ConLostTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.ConLostTSMI.Size = New System.Drawing.Size(378, 22)
         Me.ConLostTSMI.Text = "Connection lost sound"
         '
         'ConBackTSMI
         '
         Me.ConBackTSMI.Name = "ConBackTSMI"
-        Me.ConBackTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.ConBackTSMI.Size = New System.Drawing.Size(378, 22)
         Me.ConBackTSMI.Text = "Connection reestablished sound"
         '
         'NotifyTSMI
         '
         Me.NotifyTSMI.Name = "NotifyTSMI"
-        Me.NotifyTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.NotifyTSMI.Size = New System.Drawing.Size(378, 22)
         Me.NotifyTSMI.Text = "Show notification if connection status changes"
         '
         'LogSaveTSMI
         '
         Me.LogSaveTSMI.Name = "LogSaveTSMI"
-        Me.LogSaveTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.LogSaveTSMI.Size = New System.Drawing.Size(378, 22)
         Me.LogSaveTSMI.Text = "Save log files"
         '
         'AutostartTSMI
         '
         Me.AutostartTSMI.Name = "AutostartTSMI"
-        Me.AutostartTSMI.Size = New System.Drawing.Size(361, 22)
-        Me.AutostartTSMI.Text = "Automatically start check connection status on launch"
+        Me.AutostartTSMI.Size = New System.Drawing.Size(378, 22)
+        Me.AutostartTSMI.Text = "Automatically start checking connection status on launch"
         '
         'StartMinTSMI
         '
         Me.StartMinTSMI.Name = "StartMinTSMI"
-        Me.StartMinTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.StartMinTSMI.Size = New System.Drawing.Size(378, 22)
         Me.StartMinTSMI.Text = "Start minimized"
         '
         'WinStartTSMI
         '
         Me.WinStartTSMI.Name = "WinStartTSMI"
-        Me.WinStartTSMI.Size = New System.Drawing.Size(361, 22)
+        Me.WinStartTSMI.Size = New System.Drawing.Size(378, 22)
         Me.WinStartTSMI.Text = "Start on Windows startup"
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'TheTimer
