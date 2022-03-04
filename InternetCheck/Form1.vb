@@ -45,7 +45,7 @@ Public Class Form_Main
         Else
             Dim DT As DateTime = DateTime.Now
             If Not SingleCheck("google.com") Then
-                TheNotifyIcon.Icon = My.Resources.I_4_g
+                If Not Lost_Connection Then TheNotifyIcon.Icon = My.Resources.I_4_g
                 If Not SingleCheck("microsoft.com") Then
                     If Not Lost_Connection Then AddToLog("Issues connecting to the internet.", DT)
                     If Not SingleCheck("gmx.com") Then
@@ -86,8 +86,26 @@ Public Class Form_Main
             Lost_Connection = False
             Try
                 If TempAbbruch.Dauer.TotalMinutes > Convert.ToDouble(TextBox_Duration.Text) Then ListOfAbbruch.Add(TempAbbruch.Clone())
+                Try
+                    Save_Abbrüche()
+                Catch ex As Exception
+                    Dim TempCount As Integer = 0
+                    While MessageBox.Show("Connectionlog could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
+                        Save_log(Application.StartupPath & $"\connectionslog_{TempCount}.bin")
+                        TempCount += 1
+                    End While
+                End Try
             Catch
                 ListOfAbbruch.Add(TempAbbruch.Clone())
+                Try
+                    Save_Abbrüche()
+                Catch ex As Exception
+                    Dim TempCount As Integer = 0
+                    While MessageBox.Show("Connectionlog could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
+                        Save_log(Application.StartupPath & $"\connectionslog_{TempCount}.bin")
+                        TempCount += 1
+                    End While
+                End Try
             End Try
             TempAbbruch = Nothing
             Update_Listview()
@@ -152,14 +170,26 @@ Public Class Form_Main
     End Sub
 #End Region
 #Region "Visuals and remainder"
-    Private Sub Update_Listview()
+    Private Sub Update_Listview(Optional SearchPara As String = "")
         ListView_Losses.Items.Clear()
         For Each Itum In ListOfAbbruch
-            With ListView_Losses.Items.Add($"{Itum.Anfang:yyyy-MM-dd}, {Itum.Anfang:HH:mm:ss}")
+            Dim TempItem As New ListViewItem($"{Itum.Anfang:yyyy-MM-dd}, {Itum.Anfang:HH:mm:ss}")
+            With TempItem
                 .SubItems.Add($"{Itum.Ende:yyyy-MM-dd}, {Itum.Ende:HH:mm:ss}")
                 .SubItems.Add($"{Duration_Stringbuilder(Itum.Dauer)}")
                 .SubItems.Add($"{Itum.Anfang.Ticks}")
             End With
+
+            If SearchPara = "" Then
+                ListView_Losses.Items.Add(TempItem)
+            Else
+                If TempItem.Text.Contains(SearchPara) OrElse TempItem.SubItems(1).Text.Contains(SearchPara) _
+                    OrElse TempItem.SubItems(2).Text.Contains(SearchPara) Then
+                    ListView_Losses.Items.Add(TempItem)
+                Else
+                    TempItem = Nothing
+                End If
+            End If
         Next
     End Sub
 
@@ -595,6 +625,10 @@ Public Class Form_Main
     Private Sub Timer_Minimize_Tick(sender As Object, e As EventArgs) Handles Timer_Minimize.Tick
         WindowState = FormWindowState.Minimized
         Timer_Minimize.Enabled = False
+    End Sub
+
+    Private Sub TextBox_Search_TextChanged(sender As Object, e As EventArgs) Handles TextBox_Search.TextChanged
+        Update_Listview(TextBox_Search.Text)
     End Sub
 #End Region
 #Region "CheckedChanged handling"

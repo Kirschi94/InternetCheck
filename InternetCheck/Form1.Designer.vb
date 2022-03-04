@@ -38,6 +38,8 @@ Partial Class Form_Main
         Me.Button_CheckButton = New System.Windows.Forms.Button()
         Me.TabControl_Main = New System.Windows.Forms.TabControl()
         Me.TabPage_Overview = New System.Windows.Forms.TabPage()
+        Me.TextBox_Search = New System.Windows.Forms.TextBox()
+        Me.Label_Search = New System.Windows.Forms.Label()
         Me.Button_Debug = New System.Windows.Forms.Button()
         Me.TabPage_Options = New System.Windows.Forms.TabPage()
         Me.TextBox_Duration = New System.Windows.Forms.TextBox()
@@ -151,7 +153,7 @@ Partial Class Form_Main
         'Label_Losses
         '
         Me.Label_Losses.AutoSize = True
-        Me.Label_Losses.Location = New System.Drawing.Point(8, 3)
+        Me.Label_Losses.Location = New System.Drawing.Point(8, 0)
         Me.Label_Losses.Name = "Label_Losses"
         Me.Label_Losses.Size = New System.Drawing.Size(44, 15)
         Me.Label_Losses.TabIndex = 1
@@ -183,6 +185,8 @@ Partial Class Form_Main
         '
         'TabPage_Overview
         '
+        Me.TabPage_Overview.Controls.Add(Me.TextBox_Search)
+        Me.TabPage_Overview.Controls.Add(Me.Label_Search)
         Me.TabPage_Overview.Controls.Add(Me.Button_Debug)
         Me.TabPage_Overview.Controls.Add(Me.Label_Losses)
         Me.TabPage_Overview.Controls.Add(Me.Button_CheckButton)
@@ -195,13 +199,31 @@ Partial Class Form_Main
         Me.TabPage_Overview.Text = "Overview"
         Me.TabPage_Overview.UseVisualStyleBackColor = True
         '
+        'TextBox_Search
+        '
+        Me.TextBox_Search.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TextBox_Search.Location = New System.Drawing.Point(59, 399)
+        Me.TextBox_Search.Name = "TextBox_Search"
+        Me.TextBox_Search.Size = New System.Drawing.Size(145, 23)
+        Me.TextBox_Search.TabIndex = 4
+        '
+        'Label_Search
+        '
+        Me.Label_Search.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label_Search.AutoSize = True
+        Me.Label_Search.Location = New System.Drawing.Point(8, 403)
+        Me.Label_Search.Name = "Label_Search"
+        Me.Label_Search.Size = New System.Drawing.Size(45, 15)
+        Me.Label_Search.TabIndex = 5
+        Me.Label_Search.Text = "Search:"
+        '
         'Button_Debug
         '
-        Me.Button_Debug.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button_Debug.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Debug.Enabled = False
-        Me.Button_Debug.Location = New System.Drawing.Point(8, 399)
+        Me.Button_Debug.Location = New System.Drawing.Point(317, 399)
         Me.Button_Debug.Name = "Button_Debug"
-        Me.Button_Debug.Size = New System.Drawing.Size(223, 23)
+        Me.Button_Debug.Size = New System.Drawing.Size(158, 23)
         Me.Button_Debug.TabIndex = 4
         Me.Button_Debug.Text = "Lose Connection [DEBUG]"
         Me.Button_Debug.UseVisualStyleBackColor = True
@@ -394,20 +416,20 @@ Partial Class Form_Main
         'ShowToolStripMenuItem
         '
         Me.ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
-        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
         Me.ShowToolStripMenuItem.Text = "Show application"
         '
         'StartCheckingToolStripMenuItem
         '
         Me.StartCheckingToolStripMenuItem.Name = "StartCheckingToolStripMenuItem"
-        Me.StartCheckingToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.StartCheckingToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
         Me.StartCheckingToolStripMenuItem.Text = "Start checking"
         '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConLostTSMI, Me.ConBackTSMI, Me.NotifyTSMI, Me.LogSaveTSMI, Me.AutostartTSMI, Me.StartMinTSMI, Me.WinStartTSMI})
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
         Me.OptionsToolStripMenuItem.Text = "Options"
         '
         'ConLostTSMI
@@ -455,7 +477,7 @@ Partial Class Form_Main
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'TheTimer
@@ -545,4 +567,6 @@ Partial Class Form_Main
     Friend WithEvents CopyToClipboardToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents StartCheckingToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents Timer_Minimize As Timer
+    Friend WithEvents TextBox_Search As TextBox
+    Friend WithEvents Label_Search As Label
 End Class
