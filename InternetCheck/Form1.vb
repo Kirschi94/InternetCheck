@@ -82,31 +82,8 @@ Public Class Form_Main
     Private Sub Connection_Existent()
         TheNotifyIcon.Icon = My.Resources.I_4_gr
         If Lost_Connection AndAlso Not IsNothing(TempAbbruch) Then
-            TempAbbruch.Set_End(DateTime.Now)
             Lost_Connection = False
-            Try
-                If TempAbbruch.Dauer.TotalMinutes > Convert.ToDouble(TextBox_Duration.Text) Then ListOfAbbruch.Add(TempAbbruch.Clone())
-                Try
-                    Save_Abbrüche()
-                Catch ex As Exception
-                    Dim TempCount As Integer = 0
-                    While MessageBox.Show("Connectionlog could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
-                        Save_log(Application.StartupPath & $"\connectionslog_{TempCount}.bin")
-                        TempCount += 1
-                    End While
-                End Try
-            Catch
-                ListOfAbbruch.Add(TempAbbruch.Clone())
-                Try
-                    Save_Abbrüche()
-                Catch ex As Exception
-                    Dim TempCount As Integer = 0
-                    While MessageBox.Show("Connectionlog could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
-                        Save_log(Application.StartupPath & $"\connectionslog_{TempCount}.bin")
-                        TempCount += 1
-                    End While
-                End Try
-            End Try
+            Save_Abbruch()
             TempAbbruch = Nothing
             Update_Listview()
             AddToLog("Internet connection has been reestablished.")
@@ -404,6 +381,32 @@ Public Class Form_Main
     End Sub
 #End Region
 #Region "Saving and Loading"
+    Private Sub Save_Abbruch()
+        TempAbbruch.Set_End(DateTime.Now)
+        Try
+            If TempAbbruch.Dauer.TotalMinutes > Convert.ToDouble(TextBox_Duration.Text) Then ListOfAbbruch.Add(TempAbbruch.Clone())
+            Try
+                Save_Abbrüche()
+            Catch ex As Exception
+                Dim TempCount As Integer = 0
+                While MessageBox.Show("Connectionlog could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
+                    Save_log(Application.StartupPath & $"\connectionslog_{TempCount}.bin")
+                    TempCount += 1
+                End While
+            End Try
+        Catch
+            ListOfAbbruch.Add(TempAbbruch.Clone())
+            Try
+                Save_Abbrüche()
+            Catch ex As Exception
+                Dim TempCount As Integer = 0
+                While MessageBox.Show("Connectionlog could not be saved.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) = DialogResult.Retry
+                    Save_log(Application.StartupPath & $"\connectionslog_{TempCount}.bin")
+                    TempCount += 1
+                End While
+            End Try
+        End Try
+    End Sub
     Private Sub Save_ini()
         Dim iniString As String = ""
         iniString &= $"Connection lost Sound:""{TextBox_ConLost.Text}""{vbCrLf}"
@@ -495,6 +498,10 @@ Public Class Form_Main
                 TheNotifyIcon.Icon = My.Resources.I_4b
                 DeReActivatedChecking(False)
                 AddToLog("Stopped monitoring the internet connection.")
+                If Lost_Connection Then
+                    Save_Abbruch()
+                    AddToLog("The connection was still lost when monitoring was stopped! The date for reestablishing the connection in this loss is therefore specified too early!")
+                End If
             Case Else
                 Throw New NotImplementedException("This should not be able to happen at all. Please contact me asap.")
         End Select
