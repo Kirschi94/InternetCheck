@@ -796,7 +796,7 @@ Public Class Form_Main
             NonUserAction = False
         End If
 
-        If CheckBox_WinStart.Checked Then
+        If Not Starting AndAlso CheckBox_WinStart.Checked Then
             Try
                 AddToStartup()
                 AddToLog("Application added to windows startup.")
@@ -804,7 +804,7 @@ Public Class Form_Main
                 MessageBox.Show($"Application could not be added to windows startup.{vbCrLf}The following error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 AddToLog($"Failed in adding the application to windows startup. The following error occurred: {ex.Message}")
             End Try
-        Else
+        ElseIf Not Starting AndAlso Not CheckBox_WinStart.checked Then
             Try
                 RemoveFromStartup()
                 AddToLog("Application removed from autostart.")
@@ -814,7 +814,7 @@ Public Class Form_Main
             End Try
         End If
 
-        If Not CheckBox_WinStart.Checked = CheckForStartup() Then
+        If Not Starting AndAlso Not CheckBox_WinStart.Checked = CheckForStartup() Then
             Dim TempBool As Boolean = CheckForStartup()
             NonUserAction = True
             CheckBox_WinStart.Checked = TempBool
