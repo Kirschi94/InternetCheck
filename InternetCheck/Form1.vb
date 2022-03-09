@@ -353,6 +353,10 @@ Public Class Form_Main
             If CheckBox_StartMin.Checked Then Timer_Minimize.Enabled = True
             If CheckBox_Autostart.Checked Then Button1_Click(Nothing, Nothing)
 
+            Dim TempBool As Boolean = CheckForStartup()
+            CheckBox_WinStart.Checked = TempBool
+            WinStartTSMI.Checked = TempBool
+
             Starting = False
         Else Visible = False
         End If
@@ -405,7 +409,7 @@ Public Class Form_Main
     Private Sub AddToStartup()
         Dim CU As RegistryKey = Registry.CurrentUser.CreateSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run")
         CU.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
-        CU.SetValue("InternetCheck", Application.ExecutablePath.ToString)
+        CU.SetValue("InternetCheck", Application.ExecutablePath.Replace(".dll", ".exe"))
         CU.Close()
     End Sub
 
@@ -413,6 +417,14 @@ Public Class Form_Main
         Dim CU As RegistryKey = Registry.CurrentUser.CreateSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run")
         CU.DeleteValue("InternetCheck")
     End Sub
+
+    Private Function CheckForStartup()
+        Dim CU As RegistryKey = Registry.CurrentUser.CreateSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run")
+        CU.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
+        If IsNothing(CU.GetValue("InternetCheck")) Then Return False
+        If CU.GetValue("InternetCheck") = Application.ExecutablePath.Replace(".dll", ".exe") Then Return True
+        Return False
+    End Function
 #End Region
 #Region "Saving and Loading"
     Private Sub Save_Abbruch()
@@ -449,7 +461,6 @@ Public Class Form_Main
         iniString &= $"Play connection reestablished Sound:{CheckBox_ConBack.Checked}{vbCrLf}"
         iniString &= $"Notify if connection status changes:{CheckBox_Notify.Checked}{vbCrLf}"
         iniString &= $"Save log files:{CheckBox_LogSave.Checked}{vbCrLf}"
-        iniString &= $"Start on Windows startup:{CheckBox_WinStart.Checked}{vbCrLf}"
         iniString &= $"Start checking on program startup:{CheckBox_Autostart.Checked}{vbCrLf}"
         iniString &= $"Start minimized:{CheckBox_StartMin.Checked}{vbCrLf}"
         iniString &= $"Connectionlog min-duration:""{TextBox_Duration.Text}""{vbCrLf}"
@@ -484,8 +495,6 @@ Public Class Form_Main
                     NotifyTSMI.Checked = CheckBox_Notify.Checked : Continue For
                 If Line.StartsWith("Save log files:") Then CheckBox_LogSave.Checked = Line.Substring(15, Line.Length - (15)) : _
                     LogSaveTSMI.Checked = CheckBox_LogSave.Checked : Continue For
-                If Line.StartsWith("Start on Windows startup:") Then CheckBox_WinStart.Checked = Line.Substring(25, Line.Length - (25)) : _
-                    WinStartTSMI.Checked = CheckBox_WinStart.Checked : Continue For
                 If Line.StartsWith("Start checking on program startup:") Then CheckBox_Autostart.Checked = Line.Substring(34, Line.Length - (34)) : _
                     AutostartTSMI.Checked = CheckBox_Autostart.Checked : Continue For
                 If Line.StartsWith("Start minimized:") Then CheckBox_StartMin.Checked = Line.Substring(16, Line.Length - (16)) : _
@@ -503,7 +512,7 @@ Public Class Form_Main
                 EmptyLineCounter += 1
                 End If
                 Next
-                If (iniLines.Length - EmptyLineCounter) < 15 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        If (iniLines.Length - EmptyLineCounter) < 14 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub Save_Abbrüche()
@@ -786,6 +795,7 @@ Public Class Form_Main
             CheckedChanged(CheckBox_WinStart, WinStartTSMI, True)
             NonUserAction = False
         End If
+
         If CheckBox_WinStart.Checked Then
             Try
                 AddToStartup()
@@ -802,6 +812,14 @@ Public Class Form_Main
                 MessageBox.Show($"Application could not be removed from windows startup.{vbCrLf}The following error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 AddToLog($"Failed in removing the application from windows startup. The following error occurred: {ex.Message}")
             End Try
+        End If
+
+        If Not CheckBox_WinStart.Checked = CheckForStartup() Then
+            Dim TempBool As Boolean = CheckForStartup()
+            NonUserAction = True
+            CheckBox_WinStart.Checked = TempBool
+            WinStartTSMI.Checked = TempBool
+            AddToLog("The last action could not be performed correctly.")
         End If
     End Sub
 #End Region
