@@ -457,6 +457,7 @@ Public Class Form_Main
         iniString &= $"json files folder:""{FolderPathJson}""{vbCrLf}"
         iniString &= $"Windowsize:{Size.Width},{Size.Height}{vbCrLf}"
         iniString &= $"Windowposition:{LastGoodLocation.X},{LastGoodLocation.Y}{vbCrLf}"
+        iniString &= $"Columnwidths:{ListView_Losses.Columns.Item(0).Width},{ListView_Losses.Columns.Item(1).Width},{ListView_Losses.Columns.Item(2).Width}{vbCrLf}"
 
         IO.File.WriteAllText(Application.StartupPath & "\options.ini", iniString)
     End Sub
@@ -493,14 +494,16 @@ Public Class Form_Main
                 If Line.StartsWith("txt files folder:") Then FolderPathTxt = Line.Substring(18, Line.Length - (18 + 1)) : Continue For
                 If Line.StartsWith("json files folder:") Then FolderPathTxt = Line.Substring(19, Line.Length - (19 + 1)) : Continue For
                 If Line.StartsWith("Windowsize:") Then Size = New Size(Line.Substring(11, Line.IndexOf(",") - (11)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
-                If Line.StartsWith("Windowposition:") Then Location = New Point(Line.Substring(15, Line.IndexOf(",") - (15)), Line.Substring(Line.IndexOf(",") + 1)) : Continue For
-                If Convert.ToInt32(Line.Substring(15, Line.IndexOf(",") - (15))) < 0 OrElse Convert.ToInt32(Line.Substring(Line.IndexOf(",") + 1)) < 0 Then Location = New Point(0, 0)
-                'EmptyLineCounter += 1
+                If Line.StartsWith("Windowposition:") Then Location = New Point(Line.Substring(15, Line.IndexOf(",") - (15)), Line.Substring(Line.IndexOf(",") + 1)) : _
+                    If Convert.ToInt32(Line.Substring(15, Line.IndexOf(",") - (15))) < 0 OrElse Convert.ToInt32(Line.Substring(Line.IndexOf(",") + 1)) < 0 Then Location = New Point(0, 0) : Continue For
+                If Line.StartsWith("Columnwidths:") Then ListView_Losses.Columns.Item(0).Width = Line.Substring(Line.IndexOf(":") + 1, Line.IndexOf(",") - (Line.IndexOf(":") + 1)) : _
+                    ListView_Losses.Columns.Item(1).Width = Line.Substring(Line.IndexOf(",") + 1, Line.LastIndexOf(",") - (Line.IndexOf(",") + 1)) : _
+                    ListView_Losses.Columns.Item(2).Width = Line.Substring(Line.LastIndexOf(",") + 1, Line.Length - (Line.LastIndexOf(",") + 1)) : Continue For
             Else
                 EmptyLineCounter += 1
-            End If
-        Next
-        If (iniLines.Length - EmptyLineCounter) < 14 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                End If
+                Next
+                If (iniLines.Length - EmptyLineCounter) < 15 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub Save_Abbrüche()

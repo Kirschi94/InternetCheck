@@ -25,9 +25,9 @@ Partial Class Form_Main
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
         Me.ListView_Losses = New System.Windows.Forms.ListView()
-        Me.ColumnHeader1 = New System.Windows.Forms.ColumnHeader()
-        Me.ColumnHeader2 = New System.Windows.Forms.ColumnHeader()
-        Me.ColumnHeader3 = New System.Windows.Forms.ColumnHeader()
+        Me.ColumnHeader_ConLost = New System.Windows.Forms.ColumnHeader()
+        Me.ColumnHeader_ConEst = New System.Windows.Forms.ColumnHeader()
+        Me.ColumnHeader_Duration = New System.Windows.Forms.ColumnHeader()
         Me.ContextMenuStrip_ListView = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CopyToClipboardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -86,7 +86,7 @@ Partial Class Form_Main
         Me.ListView_Losses.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListView_Losses.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3})
+        Me.ListView_Losses.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader_ConLost, Me.ColumnHeader_ConEst, Me.ColumnHeader_Duration})
         Me.ListView_Losses.ContextMenuStrip = Me.ContextMenuStrip_ListView
         Me.ListView_Losses.HideSelection = False
         Me.ListView_Losses.Location = New System.Drawing.Point(8, 21)
@@ -96,20 +96,20 @@ Partial Class Form_Main
         Me.ListView_Losses.UseCompatibleStateImageBehavior = False
         Me.ListView_Losses.View = System.Windows.Forms.View.Details
         '
-        'ColumnHeader1
+        'ColumnHeader_ConLost
         '
-        Me.ColumnHeader1.Text = "Connection lost"
-        Me.ColumnHeader1.Width = 200
+        Me.ColumnHeader_ConLost.Text = "Connection lost"
+        Me.ColumnHeader_ConLost.Width = 200
         '
-        'ColumnHeader2
+        'ColumnHeader_ConEst
         '
-        Me.ColumnHeader2.Text = "Connection reestablished"
-        Me.ColumnHeader2.Width = 200
+        Me.ColumnHeader_ConEst.Text = "Connection reestablished"
+        Me.ColumnHeader_ConEst.Width = 200
         '
-        'ColumnHeader3
+        'ColumnHeader_Duration
         '
-        Me.ColumnHeader3.Text = "Duration"
-        Me.ColumnHeader3.Width = 150
+        Me.ColumnHeader_Duration.Text = "Duration"
+        Me.ColumnHeader_Duration.Width = 150
         '
         'ContextMenuStrip_ListView
         '
@@ -533,9 +533,9 @@ Partial Class Form_Main
     Friend WithEvents CheckBox_ConBack As CheckBox
     Friend WithEvents CheckBox_ConLost As CheckBox
     Friend WithEvents CheckBox_WinStart As CheckBox
-    Friend WithEvents ColumnHeader1 As ColumnHeader
-    Friend WithEvents ColumnHeader2 As ColumnHeader
-    Friend WithEvents ColumnHeader3 As ColumnHeader
+    Friend WithEvents ColumnHeader_ConLost As ColumnHeader
+    Friend WithEvents ColumnHeader_ConEst As ColumnHeader
+    Friend WithEvents ColumnHeader_Duration As ColumnHeader
     Friend WithEvents CheckBox_Notify As CheckBox
     Friend WithEvents CheckBox_LogSave As CheckBox
     Friend WithEvents CheckBox_Autostart As CheckBox
