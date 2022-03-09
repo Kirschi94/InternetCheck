@@ -8,7 +8,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>I_4a.ico</ApplicationIcon>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Signatur Kirschi.pfx</AssemblyOriginatorKeyFile>
     <Authors>Kirschi</Authors>

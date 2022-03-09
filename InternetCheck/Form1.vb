@@ -5,6 +5,7 @@ Imports System.Runtime.InteropServices
 Imports Microsoft.Win32
 
 Public Class Form_Main
+#Region "Global Variables"
     Dim Lost_Connection As Boolean = False
     Dim TempAbbruch As Abbruch = Nothing
     Dim ListOfAbbruch As New List(Of Abbruch)
@@ -17,7 +18,9 @@ Public Class Form_Main
     Dim OmaeWaMouShindeiru As Boolean = False
     Public Shared Wave1 As New NAudio.Wave.WaveOut
     Dim LastGoodLocation As New Point(0, 0)
-
+    Dim LastKnownTimespan As New TimeSpan
+#End Region
+#Region "DLL-Imports"
     Private Const SW_RESTORE As Integer = 9
     <DllImport("user32.dll")>
     Private Shared Function SetForegroundWindow(ByVal hWnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
@@ -36,7 +39,7 @@ Public Class Form_Main
     Private Declare Function IsWindowVisible Lib "user32" _
     Alias "IsWindowVisible" (ByVal hwnd As Long) As Long
     'Dim i As IntPtr = (Int64)Handle
-
+#End Region
 #Region "Connection Management"
     Private Sub CheckConnection()
         If Abbruchtest Then
@@ -149,6 +152,7 @@ Public Class Form_Main
 #Region "Visuals and remainder"
     Private Sub Update_Listview(Optional SearchPara As String = "")
         ListView_Losses.Items.Clear()
+        Dim TempTime As New TimeSpan(0)
         For Each Itum In ListOfAbbruch
             Dim TempItem As New ListViewItem($"{Itum.Anfang:yyyy-MM-dd}, {Itum.Anfang:HH:mm:ss}")
             With TempItem
@@ -156,6 +160,7 @@ Public Class Form_Main
                 .SubItems.Add($"{Duration_Stringbuilder(Itum.Dauer)}")
                 .SubItems.Add($"{Itum.Anfang.Ticks}")
             End With
+            TempTime += Itum.Dauer
 
             If SearchPara = "" Then
                 ListView_Losses.Items.Add(TempItem)
@@ -165,9 +170,37 @@ Public Class Form_Main
                     ListView_Losses.Items.Add(TempItem)
                 Else
                     TempItem = Nothing
+                    TempTime -= Itum.Dauer
                 End If
             End If
         Next
+        LastKnownTimespan = TempTime
+        Update_Label(TempTime)
+    End Sub
+
+    Private Sub Update_Label(Dauer As TimeSpan)
+        Label_LostTime.Left = Button_CheckButton.Left - (Label_LostTime.Width + 2)
+
+        If Dauer.TotalSeconds <= 0 Then
+            Label_LostTime.Text = "0 seconds of connection issues."
+        Else
+            Label_LostTime.Text = ""
+            If Dauer.Days > 0 Then Label_LostTime.Text &= $"{Dauer.Days} days, "
+            If Dauer.Hours > 0 Then Label_LostTime.Text &= $"{Dauer.Hours} hours, "
+            If Dauer.Minutes > 0 Then Label_LostTime.Text &= $"{Dauer.Minutes} minutes, "
+            If Dauer.Seconds > 0 Then Label_LostTime.Text &= $"{Dauer.Seconds} seconds, "
+
+            Label_LostTime.Text = Label_LostTime.Text.Substring(0, Label_LostTime.Text.Length - 2) & " lost."
+        End If
+        Label_LostTime.Left = Button_CheckButton.Left - (Label_LostTime.Width + 2)
+
+        If Label_LostTime.Left < (TextBox_Search.Left + TextBox_Search.Width) Then
+            Label_LostTime.Text = $"{Math.Round(Dauer.TotalSeconds, 2)} seconds lost."
+            If Dauer.TotalMinutes >= 1.5 Then Label_LostTime.Text = $"{Math.Round(Dauer.TotalMinutes, 2)} minutes lost."
+            If Dauer.TotalHours >= 2 Then Label_LostTime.Text = $"{Math.Round(Dauer.TotalHours, 2)} hours lost."
+            If Dauer.TotalDays >= 3 Then Label_LostTime.Text = $"{Math.Round(Dauer.TotalDays, 2)} days lost."
+            Label_LostTime.Left = Button_CheckButton.Left - (Label_LostTime.Width + 2)
+        End If
     End Sub
 
     Private Sub ShowBalloonTip(Optional Title As String = "", Optional Text As String = "")
@@ -319,6 +352,7 @@ Public Class Form_Main
             Update_Listview()
             If CheckBox_StartMin.Checked Then Timer_Minimize.Enabled = True
             If CheckBox_Autostart.Checked Then Button1_Click(Nothing, Nothing)
+
             Starting = False
         Else Visible = False
         End If
@@ -507,15 +541,6 @@ Public Class Form_Main
         End Select
         StartCheckingToolStripMenuItem.Text = Button_CheckButton.Text
     End Sub
-    Private Sub Button_Debug_Click(sender As Object, e As EventArgs) Handles Button_Debug.Click
-        If Abbruchtest Then
-            Button_Debug.Text = "Lose Connection [DEBUG]"
-            Abbruchtest = False
-        Else
-            Button_Debug.Text = "Reestablish Connection [DEBUG]"
-            Abbruchtest = True
-        End If
-    End Sub
 
     Private Sub Form_Main_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
         If WindowState = FormWindowState.Minimized Then
@@ -636,6 +661,14 @@ Public Class Form_Main
 
     Private Sub TextBox_Search_TextChanged(sender As Object, e As EventArgs) Handles TextBox_Search.TextChanged
         Update_Listview(TextBox_Search.Text)
+    End Sub
+
+    Private Sub Form_Main_ResizeEnd(sender As Object, e As EventArgs) Handles Me.ResizeEnd
+        Update_Label(LastKnownTimespan)
+    End Sub
+
+    Private Sub TabControl_Main_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl_Main.SelectedIndexChanged
+        Update_Label(LastKnownTimespan)
     End Sub
 #End Region
 #Region "CheckedChanged handling"

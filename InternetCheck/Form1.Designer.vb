@@ -38,9 +38,9 @@ Partial Class Form_Main
         Me.Button_CheckButton = New System.Windows.Forms.Button()
         Me.TabControl_Main = New System.Windows.Forms.TabControl()
         Me.TabPage_Overview = New System.Windows.Forms.TabPage()
+        Me.Label_LostTime = New System.Windows.Forms.Label()
         Me.TextBox_Search = New System.Windows.Forms.TextBox()
         Me.Label_Search = New System.Windows.Forms.Label()
-        Me.Button_Debug = New System.Windows.Forms.Button()
         Me.TabPage_Options = New System.Windows.Forms.TabPage()
         Me.TextBox_Duration = New System.Windows.Forms.TextBox()
         Me.Label_Dur2 = New System.Windows.Forms.Label()
@@ -91,7 +91,7 @@ Partial Class Form_Main
         Me.ListView_Losses.HideSelection = False
         Me.ListView_Losses.Location = New System.Drawing.Point(8, 21)
         Me.ListView_Losses.Name = "ListView_Losses"
-        Me.ListView_Losses.Size = New System.Drawing.Size(579, 372)
+        Me.ListView_Losses.Size = New System.Drawing.Size(594, 385)
         Me.ListView_Losses.TabIndex = 0
         Me.ListView_Losses.UseCompatibleStateImageBehavior = False
         Me.ListView_Losses.View = System.Windows.Forms.View.Details
@@ -162,7 +162,7 @@ Partial Class Form_Main
         'Button_CheckButton
         '
         Me.Button_CheckButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_CheckButton.Location = New System.Drawing.Point(481, 399)
+        Me.Button_CheckButton.Location = New System.Drawing.Point(496, 412)
         Me.Button_CheckButton.Name = "Button_CheckButton"
         Me.Button_CheckButton.Size = New System.Drawing.Size(106, 23)
         Me.Button_CheckButton.TabIndex = 2
@@ -180,29 +180,39 @@ Partial Class Form_Main
         Me.TabControl_Main.Location = New System.Drawing.Point(0, 0)
         Me.TabControl_Main.Name = "TabControl_Main"
         Me.TabControl_Main.SelectedIndex = 0
-        Me.TabControl_Main.Size = New System.Drawing.Size(601, 456)
+        Me.TabControl_Main.Size = New System.Drawing.Size(613, 469)
         Me.TabControl_Main.TabIndex = 3
         '
         'TabPage_Overview
         '
+        Me.TabPage_Overview.Controls.Add(Me.Label_LostTime)
         Me.TabPage_Overview.Controls.Add(Me.TextBox_Search)
         Me.TabPage_Overview.Controls.Add(Me.Label_Search)
-        Me.TabPage_Overview.Controls.Add(Me.Button_Debug)
         Me.TabPage_Overview.Controls.Add(Me.Label_Losses)
         Me.TabPage_Overview.Controls.Add(Me.Button_CheckButton)
         Me.TabPage_Overview.Controls.Add(Me.ListView_Losses)
         Me.TabPage_Overview.Location = New System.Drawing.Point(4, 24)
         Me.TabPage_Overview.Name = "TabPage_Overview"
         Me.TabPage_Overview.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage_Overview.Size = New System.Drawing.Size(593, 428)
+        Me.TabPage_Overview.Size = New System.Drawing.Size(605, 441)
         Me.TabPage_Overview.TabIndex = 0
         Me.TabPage_Overview.Text = "Overview"
         Me.TabPage_Overview.UseVisualStyleBackColor = True
         '
+        'Label_LostTime
+        '
+        Me.Label_LostTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label_LostTime.AutoSize = True
+        Me.Label_LostTime.Location = New System.Drawing.Point(317, 416)
+        Me.Label_LostTime.Name = "Label_LostTime"
+        Me.Label_LostTime.Size = New System.Drawing.Size(173, 15)
+        Me.Label_LostTime.TabIndex = 4
+        Me.Label_LostTime.Text = "0 seconds of connection issues."
+        '
         'TextBox_Search
         '
         Me.TextBox_Search.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_Search.Location = New System.Drawing.Point(59, 399)
+        Me.TextBox_Search.Location = New System.Drawing.Point(59, 412)
         Me.TextBox_Search.Name = "TextBox_Search"
         Me.TextBox_Search.Size = New System.Drawing.Size(145, 23)
         Me.TextBox_Search.TabIndex = 4
@@ -211,23 +221,11 @@ Partial Class Form_Main
         '
         Me.Label_Search.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_Search.AutoSize = True
-        Me.Label_Search.Location = New System.Drawing.Point(8, 403)
+        Me.Label_Search.Location = New System.Drawing.Point(8, 416)
         Me.Label_Search.Name = "Label_Search"
         Me.Label_Search.Size = New System.Drawing.Size(45, 15)
         Me.Label_Search.TabIndex = 5
         Me.Label_Search.Text = "Search:"
-        '
-        'Button_Debug
-        '
-        Me.Button_Debug.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Debug.Enabled = False
-        Me.Button_Debug.Location = New System.Drawing.Point(317, 399)
-        Me.Button_Debug.Name = "Button_Debug"
-        Me.Button_Debug.Size = New System.Drawing.Size(158, 23)
-        Me.Button_Debug.TabIndex = 4
-        Me.Button_Debug.Text = "Lose Connection [DEBUG]"
-        Me.Button_Debug.UseVisualStyleBackColor = True
-        Me.Button_Debug.Visible = False
         '
         'TabPage_Options
         '
@@ -246,7 +244,7 @@ Partial Class Form_Main
         Me.TabPage_Options.Location = New System.Drawing.Point(4, 24)
         Me.TabPage_Options.Name = "TabPage_Options"
         Me.TabPage_Options.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage_Options.Size = New System.Drawing.Size(593, 428)
+        Me.TabPage_Options.Size = New System.Drawing.Size(605, 441)
         Me.TabPage_Options.TabIndex = 2
         Me.TabPage_Options.Text = "Options"
         Me.TabPage_Options.UseVisualStyleBackColor = True
@@ -327,7 +325,7 @@ Partial Class Form_Main
         '
         Me.CheckBox_WinStart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox_WinStart.AutoSize = True
-        Me.CheckBox_WinStart.Location = New System.Drawing.Point(8, 403)
+        Me.CheckBox_WinStart.Location = New System.Drawing.Point(8, 416)
         Me.CheckBox_WinStart.Name = "CheckBox_WinStart"
         Me.CheckBox_WinStart.Size = New System.Drawing.Size(159, 19)
         Me.CheckBox_WinStart.TabIndex = 4
@@ -340,7 +338,7 @@ Partial Class Form_Main
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_ConLost.Location = New System.Drawing.Point(243, 14)
         Me.TextBox_ConLost.Name = "TextBox_ConLost"
-        Me.TextBox_ConLost.Size = New System.Drawing.Size(344, 23)
+        Me.TextBox_ConLost.Size = New System.Drawing.Size(356, 23)
         Me.TextBox_ConLost.TabIndex = 3
         '
         'TextBox_ConBack
@@ -349,7 +347,7 @@ Partial Class Form_Main
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_ConBack.Location = New System.Drawing.Point(243, 43)
         Me.TextBox_ConBack.Name = "TextBox_ConBack"
-        Me.TextBox_ConBack.Size = New System.Drawing.Size(344, 23)
+        Me.TextBox_ConBack.Size = New System.Drawing.Size(356, 23)
         Me.TextBox_ConBack.TabIndex = 2
         '
         'CheckBox_ConBack
@@ -382,7 +380,7 @@ Partial Class Form_Main
         Me.TabPage_Log.Location = New System.Drawing.Point(4, 24)
         Me.TabPage_Log.Name = "TabPage_Log"
         Me.TabPage_Log.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage_Log.Size = New System.Drawing.Size(593, 428)
+        Me.TabPage_Log.Size = New System.Drawing.Size(605, 441)
         Me.TabPage_Log.TabIndex = 1
         Me.TabPage_Log.Text = "Log"
         Me.TabPage_Log.UseVisualStyleBackColor = True
@@ -395,7 +393,7 @@ Partial Class Form_Main
         Me.RichTextBox_Log.Location = New System.Drawing.Point(8, 6)
         Me.RichTextBox_Log.Name = "RichTextBox_Log"
         Me.RichTextBox_Log.ReadOnly = True
-        Me.RichTextBox_Log.Size = New System.Drawing.Size(579, 416)
+        Me.RichTextBox_Log.Size = New System.Drawing.Size(591, 429)
         Me.RichTextBox_Log.TabIndex = 0
         Me.RichTextBox_Log.Text = ""
         '
@@ -505,7 +503,7 @@ Partial Class Form_Main
         Me.Controls.Add(Me.TabControl_Main)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(377, 347)
+        Me.MinimumSize = New System.Drawing.Size(450, 347)
         Me.Name = "Form_Main"
         Me.Text = "InternetCheck"
         Me.ContextMenuStrip_ListView.ResumeLayout(False)
@@ -540,7 +538,6 @@ Partial Class Form_Main
     Friend WithEvents ColumnHeader3 As ColumnHeader
     Friend WithEvents CheckBox_Notify As CheckBox
     Friend WithEvents CheckBox_LogSave As CheckBox
-    Friend WithEvents Button_Debug As Button
     Friend WithEvents CheckBox_Autostart As CheckBox
     Friend WithEvents CheckBox_StartMin As CheckBox
     Friend WithEvents ContextMenuStrip_NotIcon As ContextMenuStrip
@@ -569,4 +566,5 @@ Partial Class Form_Main
     Friend WithEvents Timer_Minimize As Timer
     Friend WithEvents TextBox_Search As TextBox
     Friend WithEvents Label_Search As Label
+    Friend WithEvents Label_LostTime As Label
 End Class
