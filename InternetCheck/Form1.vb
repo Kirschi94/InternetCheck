@@ -184,7 +184,18 @@ Public Class Form_Main
         If Dauer.TotalSeconds <= 0 Then
             Label_LostTime.Text = "0 seconds of connection issues."
         Else
-            Label_LostTime.Text = ""
+            Label_LostTime.Text = $"{ListView_Losses.Items.Count} losses, "
+            If Dauer.Days > 0 Then Label_LostTime.Text &= $"{Dauer.Days} days, "
+            If Dauer.Hours > 0 Then Label_LostTime.Text &= $"{Dauer.Hours} hours, "
+            If Dauer.Minutes > 0 Then Label_LostTime.Text &= $"{Dauer.Minutes} minutes, "
+            If Dauer.Seconds > 0 Then Label_LostTime.Text &= $"{Dauer.Seconds} seconds, "
+
+            Label_LostTime.Text = Label_LostTime.Text.Substring(0, Label_LostTime.Text.Length - 2) & " lost."
+        End If
+        Label_LostTime.Left = Button_CheckButton.Left - (Label_LostTime.Width + 2)
+
+        If Label_LostTime.Left < (TextBox_Search.Left + TextBox_Search.Width) Then
+            Label_LostTime.Text = $""
             If Dauer.Days > 0 Then Label_LostTime.Text &= $"{Dauer.Days} days, "
             If Dauer.Hours > 0 Then Label_LostTime.Text &= $"{Dauer.Hours} hours, "
             If Dauer.Minutes > 0 Then Label_LostTime.Text &= $"{Dauer.Minutes} minutes, "
