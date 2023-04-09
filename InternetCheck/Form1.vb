@@ -375,9 +375,9 @@ Public Class Form_Main
 
     Private Sub Form_Main_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If Not Starting And Not OmaeWaMouShindeiru Then
-            If (TheTimer.Enabled AndAlso
+            If (TheTimer.Enabled AndAlso CheckBox_eZend.Checked AndAlso
             MessageBox.Show("Do you really want to close the application?", "InternetCheck", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes) _
-            Or Not TheTimer.Enabled Then
+            Or Not TheTimer.Enabled Or CheckBox_eZend.Checked = False Then
 
                 If TheTimer.Enabled Then Button1_Click(Nothing, Nothing)
 
@@ -480,6 +480,7 @@ Public Class Form_Main
         iniString &= $"Windowsize:{Size.Width},{Size.Height}{vbCrLf}"
         iniString &= $"Windowposition:{LastGoodLocation.X},{LastGoodLocation.Y}{vbCrLf}"
         iniString &= $"Columnwidths:{ListView_Losses.Columns.Item(0).Width},{ListView_Losses.Columns.Item(1).Width},{ListView_Losses.Columns.Item(2).Width}{vbCrLf}"
+        iniString &= $"Ask before closing:{CheckBox_eZend.Checked}{vbCrLf}"
 
         IO.File.WriteAllText(Application.StartupPath & "\options.ini", iniString)
     End Sub
@@ -519,11 +520,12 @@ Public Class Form_Main
                 If Line.StartsWith("Columnwidths:") Then ListView_Losses.Columns.Item(0).Width = Line.Substring(Line.IndexOf(":") + 1, Line.IndexOf(",") - (Line.IndexOf(":") + 1)) : _
                     ListView_Losses.Columns.Item(1).Width = Line.Substring(Line.IndexOf(",") + 1, Line.LastIndexOf(",") - (Line.IndexOf(",") + 1)) : _
                     ListView_Losses.Columns.Item(2).Width = Line.Substring(Line.LastIndexOf(",") + 1, Line.Length - (Line.LastIndexOf(",") + 1)) : Continue For
+                If Line.StartsWith("Ask before closing:") Then CheckBox_eZend.Checked = Line.Substring(19, Line.Length - (19)) : Continue For
             Else
-                EmptyLineCounter += 1
+                    EmptyLineCounter += 1
                 End If
                 Next
-        If (iniLines.Length - EmptyLineCounter) < 14 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        If (iniLines.Length - EmptyLineCounter) < 15 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub Save_Abbrüche()

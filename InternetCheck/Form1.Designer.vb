@@ -73,6 +73,7 @@ Partial Class Form_Main
         Me.TheBackgroundWorker = New System.ComponentModel.BackgroundWorker()
         Me.FolderBrowserDialog_Export = New System.Windows.Forms.FolderBrowserDialog()
         Me.Timer_Minimize = New System.Windows.Forms.Timer(Me.components)
+        Me.CheckBox_eZend = New System.Windows.Forms.CheckBox()
         Me.ContextMenuStrip_ListView.SuspendLayout()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
@@ -229,6 +230,7 @@ Partial Class Form_Main
         '
         'TabPage_Options
         '
+        Me.TabPage_Options.Controls.Add(Me.CheckBox_eZend)
         Me.TabPage_Options.Controls.Add(Me.TextBox_Duration)
         Me.TabPage_Options.Controls.Add(Me.Label_Dur2)
         Me.TabPage_Options.Controls.Add(Me.Label_Dur1)
@@ -251,7 +253,7 @@ Partial Class Form_Main
         '
         'TextBox_Duration
         '
-        Me.TextBox_Duration.Location = New System.Drawing.Point(289, 187)
+        Me.TextBox_Duration.Location = New System.Drawing.Point(289, 214)
         Me.TextBox_Duration.MaxLength = 5
         Me.TextBox_Duration.Name = "TextBox_Duration"
         Me.TextBox_Duration.Size = New System.Drawing.Size(42, 23)
@@ -262,7 +264,7 @@ Partial Class Form_Main
         'Label_Dur2
         '
         Me.Label_Dur2.AutoSize = True
-        Me.Label_Dur2.Location = New System.Drawing.Point(337, 190)
+        Me.Label_Dur2.Location = New System.Drawing.Point(337, 217)
         Me.Label_Dur2.Name = "Label_Dur2"
         Me.Label_Dur2.Size = New System.Drawing.Size(53, 15)
         Me.Label_Dur2.TabIndex = 10
@@ -271,7 +273,7 @@ Partial Class Form_Main
         'Label_Dur1
         '
         Me.Label_Dur1.AutoSize = True
-        Me.Label_Dur1.Location = New System.Drawing.Point(5, 190)
+        Me.Label_Dur1.Location = New System.Drawing.Point(5, 217)
         Me.Label_Dur1.Name = "Label_Dur1"
         Me.Label_Dur1.Size = New System.Drawing.Size(278, 15)
         Me.Label_Dur1.TabIndex = 9
@@ -280,7 +282,7 @@ Partial Class Form_Main
         'CheckBox_StartMin
         '
         Me.CheckBox_StartMin.AutoSize = True
-        Me.CheckBox_StartMin.Location = New System.Drawing.Point(8, 162)
+        Me.CheckBox_StartMin.Location = New System.Drawing.Point(8, 189)
         Me.CheckBox_StartMin.Name = "CheckBox_StartMin"
         Me.CheckBox_StartMin.Size = New System.Drawing.Size(109, 19)
         Me.CheckBox_StartMin.TabIndex = 8
@@ -495,6 +497,18 @@ Partial Class Form_Main
         '
         Me.Timer_Minimize.Interval = 10
         '
+        'CheckBox_eZend
+        '
+        Me.CheckBox_eZend.AutoSize = True
+        Me.CheckBox_eZend.Checked = True
+        Me.CheckBox_eZend.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_eZend.Location = New System.Drawing.Point(8, 161)
+        Me.CheckBox_eZend.Name = "CheckBox_eZend"
+        Me.CheckBox_eZend.Size = New System.Drawing.Size(399, 19)
+        Me.CheckBox_eZend.TabIndex = 12
+        Me.CheckBox_eZend.Text = "Ask before closing the program when actively checking for connection"
+        Me.CheckBox_eZend.UseVisualStyleBackColor = True
+        '
         'Form_Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -567,4 +581,5 @@ Partial Class Form_Main
     Friend WithEvents TextBox_Search As TextBox
     Friend WithEvents Label_Search As Label
     Friend WithEvents Label_LostTime As Label
+    Friend WithEvents CheckBox_eZend As CheckBox
 End Class
