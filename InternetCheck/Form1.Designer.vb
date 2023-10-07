@@ -42,6 +42,7 @@ Partial Class Form_Main
         Me.TextBox_Search = New System.Windows.Forms.TextBox()
         Me.Label_Search = New System.Windows.Forms.Label()
         Me.TabPage_Options = New System.Windows.Forms.TabPage()
+        Me.CheckBox_eZend = New System.Windows.Forms.CheckBox()
         Me.TextBox_Duration = New System.Windows.Forms.TextBox()
         Me.Label_Dur2 = New System.Windows.Forms.Label()
         Me.Label_Dur1 = New System.Windows.Forms.Label()
@@ -73,7 +74,6 @@ Partial Class Form_Main
         Me.TheBackgroundWorker = New System.ComponentModel.BackgroundWorker()
         Me.FolderBrowserDialog_Export = New System.Windows.Forms.FolderBrowserDialog()
         Me.Timer_Minimize = New System.Windows.Forms.Timer(Me.components)
-        Me.CheckBox_eZend = New System.Windows.Forms.CheckBox()
         Me.ContextMenuStrip_ListView.SuspendLayout()
         Me.TabControl_Main.SuspendLayout()
         Me.TabPage_Overview.SuspendLayout()
@@ -250,6 +250,18 @@ Partial Class Form_Main
         Me.TabPage_Options.TabIndex = 2
         Me.TabPage_Options.Text = "Options"
         Me.TabPage_Options.UseVisualStyleBackColor = True
+        '
+        'CheckBox_eZend
+        '
+        Me.CheckBox_eZend.AutoSize = True
+        Me.CheckBox_eZend.Checked = True
+        Me.CheckBox_eZend.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_eZend.Location = New System.Drawing.Point(8, 161)
+        Me.CheckBox_eZend.Name = "CheckBox_eZend"
+        Me.CheckBox_eZend.Size = New System.Drawing.Size(399, 19)
+        Me.CheckBox_eZend.TabIndex = 12
+        Me.CheckBox_eZend.Text = "Ask before closing the program when actively checking for connection"
+        Me.CheckBox_eZend.UseVisualStyleBackColor = True
         '
         'TextBox_Duration
         '
@@ -482,7 +494,7 @@ Partial Class Form_Main
         '
         'TheTimer
         '
-        Me.TheTimer.Interval = 12000
+        Me.TheTimer.Interval = 10000
         '
         'TheBackgroundWorker
         '
@@ -496,18 +508,6 @@ Partial Class Form_Main
         'Timer_Minimize
         '
         Me.Timer_Minimize.Interval = 10
-        '
-        'CheckBox_eZend
-        '
-        Me.CheckBox_eZend.AutoSize = True
-        Me.CheckBox_eZend.Checked = True
-        Me.CheckBox_eZend.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox_eZend.Location = New System.Drawing.Point(8, 161)
-        Me.CheckBox_eZend.Name = "CheckBox_eZend"
-        Me.CheckBox_eZend.Size = New System.Drawing.Size(399, 19)
-        Me.CheckBox_eZend.TabIndex = 12
-        Me.CheckBox_eZend.Text = "Ask before closing the program when actively checking for connection"
-        Me.CheckBox_eZend.UseVisualStyleBackColor = True
         '
         'Form_Main
         '

@@ -3,6 +3,9 @@ Imports System.Net.NetworkInformation
 Imports System.Threading
 Imports System.Runtime.InteropServices
 Imports Microsoft.Win32
+Imports System.Security.Cryptography.X509Certificates
+Imports System.Timers
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
 Public Class Form_Main
 #Region "Global Variables"
@@ -19,6 +22,15 @@ Public Class Form_Main
     Public Shared Wave1 As New NAudio.Wave.WaveOut
     Dim LastGoodLocation As New Point(0, 0)
     Dim LastKnownTimespan As New TimeSpan
+
+    Dim OldChecking As Boolean = False
+    WithEvents PingList As New BindingList(Of Boolean)
+    ReadOnly HostList As String() = {"google.com", "youtube.com", "wikipedia.org", "twitter.com", "gmx.net",
+        "bing.com", "reddit.com", "tiktok.com", "duckduckgo.com", "8.8.8.8", "8.8.4.4"}
+    Dim State As Integer = 0
+    Dim LastDatetimeLost As DateTime = Nothing
+    ReadOnly debugging As Boolean = False
+    'Public Event PingAdded(sender As Object, e As EventArgs)
 #End Region
 #Region "DLL-Imports"
     Private Const SW_RESTORE As Integer = 9
@@ -43,31 +55,46 @@ Public Class Form_Main
 #Region "Connection Management"
     Private Sub CheckConnection()
         If Abbruchtest Then
-            Threading.Thread.Sleep(1000)
+            Thread.Sleep(1000)
             Connection_Lost()
         Else
-            Dim DT As DateTime = DateTime.Now
-            If Not SingleCheck("google.com") Then
-                If Not Lost_Connection Then TheNotifyIcon.Icon = My.Resources.I_4_g
-                If Not SingleCheck("microsoft.com") Then
-                    If Not Lost_Connection Then AddToLog("Issues connecting to the internet.", DT)
-                    If Not SingleCheck("gmx.com") Then
-                        If Not SingleCheck("bing.com") Then
-                            Connection_Lost()
-                        Else
-                            Connection_Existent()
-                            AddToLog("Issues resolved.")
-                        End If
+            If OldChecking Then
+                DoOldChecking()
+            Else
+                'Dim ThreadList As New List(Of Thread)
+                For Each Host As String In HostList
+                    Dim aThread = New Thread(Sub() SingleCheck(Host)) With {
+                        .IsBackground = True
+                    }
+                    aThread.Start()
+                    'ThreadList.Add(aThread)
+                Next
+            End If
+        End If
+    End Sub
+
+    Private Sub DoOldChecking()
+        Dim DT As DateTime = DateTime.Now
+        If Not SingleCheckOld("google.com") Then
+            If Not Lost_Connection Then TheNotifyIcon.Icon = My.Resources.I_4_g
+            If Not SingleCheckOld("microsoft.com") Then
+                If Not Lost_Connection Then AddToLog("Issues connecting to the internet.", DT)
+                If Not SingleCheckOld("gmx.com") Then
+                    If Not SingleCheckOld("bing.com") Then
+                        Connection_Lost()
                     Else
                         Connection_Existent()
                         AddToLog("Issues resolved.")
                     End If
                 Else
                     Connection_Existent()
+                    AddToLog("Issues resolved.")
                 End If
             Else
                 Connection_Existent()
             End If
+        Else
+            Connection_Existent()
         End If
     End Sub
 
@@ -75,7 +102,7 @@ Public Class Form_Main
         TheNotifyIcon.Icon = My.Resources.I_4_r
         If Not Lost_Connection Then
             Lost_Connection = True
-            TempAbbruch = New Abbruch(DateTime.Now)
+            TempAbbruch = New Abbruch(LastDatetimeLost)
             AddToLog("Internet connection has been lost.")
             If CheckBox_ConLost.Checked Then PlaySound(True)
             If CheckBox_Notify.Checked Then ShowBalloonTip("Internet connection lost", "Internet connection has been lost.")
@@ -92,6 +119,46 @@ Public Class Form_Main
             AddToLog("Internet connection has been reestablished.")
             If CheckBox_ConBack.Checked Then PlaySound(False)
             If CheckBox_Notify.Checked Then ShowBalloonTip("Internet connection reestablished", "Internet connection has been reestablished.")
+        End If
+    End Sub
+
+    Private Sub ChangeInList() Handles PingList.ListChanged
+        If PingList.Count >= HostList.Length Then
+#Region "Debugging"
+            If debugging Then
+                Dim Temp As String = ""
+                For Each itm In PingList
+                    Temp &= $"{itm} || "
+                Next
+                AddToLog($"{Temp}{PingList.Count}")
+            End If
+#End Region
+            Dim DT As DateTime = DateTime.Now
+            Dim InternetState As Integer = PingList.Count
+
+            For Each aPing As Boolean In PingList
+                If aPing Then InternetState -= 1
+            Next
+
+            If (Not InternetState <= (PingList.Count / 3)) AndAlso (State <= 0) Then
+                State += 1
+                AddToLog($"Issues connecting to the internet.", DT)
+                If (Not LastDatetimeLost = Nothing) AndAlso (Not LastDatetimeLost.Ticks < DateTime.Now.Ticks) Then
+                    LastDatetimeLost = DateTime.Now
+                End If
+            ElseIf (Not InternetState = 0) AndAlso (State >= 2) Then
+                Connection_Lost()
+            ElseIf InternetState = 0 Then
+                If State >= 1 Then AddToLog("Issues resolved.")
+                Connection_Existent()
+                LastDatetimeLost = Nothing
+            End If
+
+            If InternetState < 0 Or State < 0 Then
+                AddToLog($"Hä. InternetState: {InternetState}, State: {State}")
+            End If
+
+            PingList.Clear()
         End If
     End Sub
 #End Region
@@ -225,13 +292,24 @@ Public Class Form_Main
         Button_CheckButton.Text = If(state, "Stop checking", "Start checking")
     End Sub
 
-    Private Sub AddToLog(ByVal Text As String, Optional DT As DateTime = Nothing)
+    Private Sub AddToLog(Text As String, Optional DT As DateTime = Nothing)
+        If IsNothing(DT) Or DT.Ticks < 100 Then DT = DateTime.Now
+        If RichTextBox_Log.InvokeRequired Then
+            Dim NeuerThread As New AddToLogMainAndererThread(AddressOf AddToLogMain)
+            Invoke(NeuerThread, New Object() {Text, DT})
+        Else
+            AddToLogMain(Text, DT)
+        End If
+    End Sub
+
+    Delegate Sub AddToLogMainAndererThread(ByVal Text As String, DT As DateTime)
+    Private Sub AddToLogMain(ByVal Text As String, Optional DT As DateTime = Nothing)
         If IsNothing(DT) Or DT.Ticks < 100 Then DT = DateTime.Now
         Dim Output As String = $"[{DT:yyyy-MM-dd}, {DT:HH:mm:ss}] {Text}"
         RichTextBox_Log.Text = Output & vbCrLf & RichTextBox_Log.Text
     End Sub
 
-    Private Function SingleCheck(host As String)
+    Private Function SingleCheckOld(host As String)
         Try
             Dim myPing As New Ping()
             Dim buffer As Byte() = New Byte(31) {}
@@ -243,6 +321,24 @@ Public Class Form_Main
             Return False
         End Try
     End Function
+
+    Private Sub SingleCheck(host As String)
+        Try
+            Dim myPing As New Ping()
+            Dim buffer As Byte() = New Byte(31) {}
+            'Dim buffer As Byte() = New Byte(1023) {}
+            Dim timeout As Integer = 500
+            Dim pingOptions As New PingOptions()
+            Dim reply As PingReply = myPing.Send(host, timeout, buffer, pingOptions)
+            PingList.Add(reply.Status = IPStatus.Success)
+#Region "debugging"
+            If debugging Then AddToLog($"{reply.Address} || {reply.Status} || {host}")
+#End Region
+        Catch
+            PingList.Add(False)
+        End Try
+        'RaiseEvent PingAdded(Me, New EventArgs())
+    End Sub
     Private Function Duration_Stringbuilder(Dauer As TimeSpan)
         Dim Output As String = ""
         If Dauer.Days > 0 Then
@@ -522,9 +618,9 @@ Public Class Form_Main
                     ListView_Losses.Columns.Item(2).Width = Line.Substring(Line.LastIndexOf(",") + 1, Line.Length - (Line.LastIndexOf(",") + 1)) : Continue For
                 If Line.StartsWith("Ask before closing:") Then CheckBox_eZend.Checked = Line.Substring(19, Line.Length - (19)) : Continue For
             Else
-                    EmptyLineCounter += 1
-                End If
-                Next
+                EmptyLineCounter += 1
+            End If
+        Next
         If (iniLines.Length - EmptyLineCounter) < 15 Then MessageBox.Show("Options file could not be read properly. Some saved options might not have been applied.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
