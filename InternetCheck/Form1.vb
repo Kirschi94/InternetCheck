@@ -148,6 +148,8 @@ Public Class Form_Main
                 If State >= 1 Then AddToLog("Issues resolved.")
                 Connection_Existent()
                 LastDatetimeLost = Nothing
+            ElseIf (Not InternetState <= (PingList.Count / 5)) AndAlso (State <= 0) Then
+                AddToLog($"Anomaly detected.", DT)
             End If
 
             If InternetState < 0 Or State < 0 Then
