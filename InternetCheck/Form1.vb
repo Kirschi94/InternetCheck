@@ -30,7 +30,6 @@ Public Class Form_Main
     Dim State As Integer = 0
     Dim LastDatetimeLost As DateTime = Nothing
     ReadOnly debugging As Boolean = False
-    'Public Event PingAdded(sender As Object, e As EventArgs)
 #End Region
 #Region "DLL-Imports"
     Private Const SW_RESTORE As Integer = 9
@@ -50,7 +49,6 @@ Public Class Form_Main
 
     Private Declare Function IsWindowVisible Lib "user32" _
     Alias "IsWindowVisible" (ByVal hwnd As Long) As Long
-    'Dim i As IntPtr = (Int64)Handle
 #End Region
 #Region "Connection Management"
     Private Sub CheckConnection()
@@ -61,13 +59,11 @@ Public Class Form_Main
             If OldChecking Then
                 DoOldChecking()
             Else
-                'Dim ThreadList As New List(Of Thread)
                 For Each Host As String In HostList
                     Dim aThread = New Thread(Sub() SingleCheck(Host)) With {
                         .IsBackground = True
                     }
                     aThread.Start()
-                    'ThreadList.Add(aThread)
                 Next
             End If
         End If
@@ -337,7 +333,6 @@ Public Class Form_Main
         Catch
             PingList.Add(False)
         End Try
-        'RaiseEvent PingAdded(Me, New EventArgs())
     End Sub
     Private Function Duration_Stringbuilder(Dauer As TimeSpan)
         Dim Output As String = ""
