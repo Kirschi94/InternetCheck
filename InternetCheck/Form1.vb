@@ -29,7 +29,7 @@ Public Class Form_Main
         "bing.com", "reddit.com", "tiktok.com", "duckduckgo.com", "8.8.8.8", "8.8.4.4"}
     Dim State As Integer = 0
     Dim LastDatetimeLost As DateTime = Nothing
-    ReadOnly debugging As Boolean = False
+    ReadOnly debugging As Boolean = True
 #End Region
 #Region "DLL-Imports"
     Private Const SW_RESTORE As Integer = 9
@@ -123,9 +123,13 @@ Public Class Form_Main
 #Region "Debugging"
             If debugging Then
                 Dim Temp As String = ""
-                For Each itm In PingList
-                    Temp &= $"{itm} || "
-                Next
+                Try
+                    For Each itm In PingList
+                        Temp &= $"{itm} || "
+                    Next
+                Catch ex As Exception
+                    AddToLog($"Exception: {ex.Message}")
+                End Try
                 AddToLog($"{Temp}{PingList.Count}")
             End If
 #End Region
@@ -136,13 +140,14 @@ Public Class Form_Main
                 If aPing Then InternetState -= 1
             Next
 
-            If (Not InternetState <= (PingList.Count / 3)) AndAlso (State <= 0) Then
+            If (Not InternetState <= (PingList.Count / 4)) AndAlso (State <= 0) Then
                 State += 1
+                If Not Lost_Connection Then TheNotifyIcon.Icon = My.Resources.I_4_g
                 AddToLog($"Issues connecting to the internet.", DT)
                 If (Not LastDatetimeLost = Nothing) AndAlso (Not LastDatetimeLost.Ticks < DateTime.Now.Ticks) Then
                     LastDatetimeLost = DateTime.Now
                 End If
-            ElseIf (Not InternetState = 0) AndAlso (State >= 2) Then
+            ElseIf (Not InternetState = 0) AndAlso (State >= 2) AndAlso (InternetState <= (PingList.Count / 3)) Then
                 Connection_Lost()
             ElseIf InternetState = 0 Then
                 If State >= 1 Then AddToLog("Issues resolved.") : State = 0
