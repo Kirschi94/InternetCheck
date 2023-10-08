@@ -429,7 +429,7 @@ Public Class Form_Main
         CheckForOtherInstance()
 
         If Not OmaeWaMouShindeiru Then
-            AddToLog("Application starting..")
+            AddToLog($"Application Version {Application.ProductVersion} starting..")
             Try
                 Load_And_Apply_ini()
                 AddToLog("Options loaded.")
