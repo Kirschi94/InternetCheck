@@ -29,7 +29,7 @@ Public Class Form_Main
         "bing.com", "reddit.com", "tiktok.com", "duckduckgo.com", "8.8.8.8", "8.8.4.4"}
     Dim State As Integer = 0
     Dim LastDatetimeLost As DateTime = Nothing
-    ReadOnly debugging As Boolean = False
+    ReadOnly debugging As Boolean = True
 #End Region
 #Region "DLL-Imports"
     Private Const SW_RESTORE As Integer = 9
@@ -59,12 +59,20 @@ Public Class Form_Main
             If OldChecking Then
                 DoOldChecking()
             Else
-                For Each Host As String In HostList
-                    Dim aThread = New Thread(Sub() SingleCheck(Host)) With {
-                        .IsBackground = True
-                    }
-                    aThread.Start()
-                Next
+                If PingList.Count <= 0 Then
+                    For Each Host As String In HostList
+                        Dim aThread = New Thread(Sub() SingleCheck(Host)) With {
+                            .IsBackground = True
+                        }
+                        aThread.Start()
+                    Next
+                Else
+#Region "debugging"
+                    If debugging Then
+                        AddToLog("PingList not empty, connection check skipped.")
+                    End If
+#End Region
+                End If
             End If
         End If
     End Sub
@@ -120,40 +128,44 @@ Public Class Form_Main
 
     Private Sub ChangeInList() Handles PingList.ListChanged
         If PingList.Count >= HostList.Length Then
+            Dim tempPingList As New List(Of Boolean)
+            For Each singlePing In PingList
+                tempPingList.Add(singlePing)
+            Next
 #Region "Debugging"
             If debugging Then
                 Dim Temp As String = ""
                 Try
-                    For Each itm In PingList
+                    For Each itm In tempPingList
                         Temp &= $"{itm} || "
                     Next
                 Catch ex As Exception
                     AddToLog($"Exception: {ex.Message}")
                 End Try
-                AddToLog($"{Temp}{PingList.Count}")
+                AddToLog($"{Temp}{tempPingList.Count}")
             End If
 #End Region
             Dim DT As DateTime = DateTime.Now
-            Dim InternetState As Integer = PingList.Count
+            Dim InternetState As Integer = tempPingList.Count
 
-            For Each aPing As Boolean In PingList
+            For Each aPing As Boolean In tempPingList
                 If aPing Then InternetState -= 1
             Next
 
-            If (Not InternetState <= (PingList.Count / 4)) AndAlso (State <= 0) Then
+            If (Not InternetState <= (tempPingList.Count / 4)) AndAlso (State <= 0) Then
                 State += 1
                 If Not Lost_Connection Then TheNotifyIcon.Icon = My.Resources.I_4_g
                 AddToLog($"Issues connecting to the internet.", DT)
                 If (Not LastDatetimeLost = Nothing) AndAlso (Not LastDatetimeLost.Ticks < DateTime.Now.Ticks) Then
                     LastDatetimeLost = DateTime.Now
                 End If
-            ElseIf (Not InternetState = 0) AndAlso (State >= 2) AndAlso (InternetState <= (PingList.Count / 3)) Then
+            ElseIf (Not InternetState = 0) AndAlso (State >= 2) AndAlso (InternetState <= (tempPingList.Count / 3)) Then
                 Connection_Lost()
             ElseIf InternetState = 0 Then
                 If State >= 1 Then AddToLog("Issues resolved.") : State = 0
                 Connection_Existent()
                 LastDatetimeLost = Nothing
-            ElseIf (Not InternetState <= (PingList.Count / 5)) AndAlso (State <= 0) Then
+            ElseIf (Not InternetState <= (tempPingList.Count / 5)) AndAlso (State <= 0) Then
                 AddToLog($"Anomaly detected.", DT)
             End If
 
@@ -161,6 +173,7 @@ Public Class Form_Main
                 AddToLog($"Hä. InternetState: {InternetState}, State: {State} || Please send this Log to me.")
             End If
 
+            tempPingList.Clear()
             PingList.Clear()
         End If
     End Sub
