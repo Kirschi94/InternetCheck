@@ -145,7 +145,7 @@ Public Class Form_Main
             ElseIf (Not InternetState = 0) AndAlso (State >= 2) Then
                 Connection_Lost()
             ElseIf InternetState = 0 Then
-                If State >= 1 Then AddToLog("Issues resolved.")
+                If State >= 1 Then AddToLog("Issues resolved.") : State = 0
                 Connection_Existent()
                 LastDatetimeLost = Nothing
             ElseIf (Not InternetState <= (PingList.Count / 5)) AndAlso (State <= 0) Then
@@ -153,7 +153,7 @@ Public Class Form_Main
             End If
 
             If InternetState < 0 Or State < 0 Then
-                AddToLog($"Hä. InternetState: {InternetState}, State: {State}")
+                AddToLog($"Hä. InternetState: {InternetState}, State: {State} || Please send this Log to me.")
             End If
 
             PingList.Clear()
