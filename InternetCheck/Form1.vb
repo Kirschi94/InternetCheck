@@ -29,7 +29,7 @@ Public Class Form_Main
         "bing.com", "reddit.com", "tiktok.com", "duckduckgo.com", "8.8.8.8", "8.8.4.4"}
     Dim State As Integer = 0
     Dim LastDatetimeLost As DateTime = Nothing
-    ReadOnly debugging As Boolean = True
+    ReadOnly debugging As Boolean = False
 #End Region
 #Region "DLL-Imports"
     Private Const SW_RESTORE As Integer = 9
